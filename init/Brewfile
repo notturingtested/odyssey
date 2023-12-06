@@ -1,0 +1,81 @@
+###################################################################
+#Name          Brewfile
+#Description   Global brew packages
+#Author        Braydn Tanner
+###################################################################
+
+tap 'homebrew/cask'
+
+###################################################################
+# GUI Applications
+###################################################################
+
+# Terminal
+cask 'alacritty'
+cask 'warp'
+cask 'iTerm2'
+
+# Productivity
+cask 'bitwarden'
+cask 'amethyst'
+cask 'maccy'
+cask 'brave-browser'
+cask 'slack'
+
+# Code
+cask 'docker'
+cask 'tableplus'
+cask 'postman'
+cask 'gpg-suite-no-mail'
+
+
+
+###################################################################
+# Shell Tools
+###################################################################
+
+brew 'vim'
+brew 'nvim'
+brew 'exa'
+brew 'bat'
+brew 'ripgrep'
+brew 'fzf'
+brew 'fd'
+brew 'entr'
+brew 'jq'
+brew 'yq'
+brew 'aspell' # spell checker
+brew 'wget'
+brew 'tmux'
+brew 'gawk'
+brew 'git-delta'
+brew 'pandoc' 
+brew 'ripgrep'
+brew 'shellcheck' # shell script linting
+brew 'tldr' # tldr of the man pages
+brew 'tree'
+
+###################################################################
+# Utilities
+###################################################################
+
+brew 'kind'
+brew 'kubectx'
+brew 'bitwarden-cli'
+brew 'k9s'
+brew 'awscli'
+
+###################################################################
+# Languages
+###################################################################
+
+brew 'go'
+# brew 'golangci-lint'
+# brew 'pyenv'
+# brew 'rbenv'
+# brew 'cmake'
+
+###################################################################
+# Fonts
+tap 'homebrew/cask-fonts'
+cask 'font-hack-nerd-font'
