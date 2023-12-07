@@ -109,8 +109,8 @@ return {
   -- hunks in a commit.
   {
     "lewis6991/gitsigns.nvim",
-    event = "LazyFile",
-    opts = {
+    -- event = "LazyFile",
+      opts = {
       signs = {
         add = { text = "▎" },
         change = { text = "▎" },
@@ -148,8 +148,8 @@ return {
   -- instances.
   {
     "RRethy/vim-illuminate",
-    event = "LazyFile",
-    opts = {
+    -- event = "LazyFile",
+      opts = {
       delay = 200,
       large_file_cutoff = 2000,
       large_file_overrides = {
@@ -257,7 +257,7 @@ return {
   {
     "folke/todo-comments.nvim",
     cmd = { "TodoTrouble", "TodoTelescope" },
-    event = "LazyFile",
+    -- event = "LazyFile",
     config = true,
     -- stylua: ignore
     keys = {

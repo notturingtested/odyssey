@@ -46,13 +46,6 @@ require('lazy').setup({
         end, { expr = true, desc = 'Jump to previous hunk' })
 
         -- Actions
-        -- visual mode
-        map('v', '<leader>hs', function()
-          gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
-        end, { desc = 'stage git hunk' })
-        map('v', '<leader>hr', { desc = 'reset git hunk' }, function()
-          gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
-        end)
         -- normal mode
         map('n', '<leader>hs', gs.stage_hunk, { desc = 'git stage hunk' })
         map('n', '<leader>hr', gs.reset_hunk, { desc = 'git reset hunk' })
@@ -100,7 +93,7 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
-
+  {'kabouzeid/nvim-lspinstall'},
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -205,6 +198,7 @@ require('lazy').setup({
   { "nvim-lua/plenary.nvim",   lazy = true },
   { import = 'ui' },
   { import = 'coding' },
+  { import = 'editor'},
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
