@@ -81,7 +81,7 @@ local servers = {
   html = { filetypes = { 'html', 'twig', 'hbs'} },
   bashls = {},
   tailwindcss = {},
-
+  vuels = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
