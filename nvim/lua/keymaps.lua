@@ -33,4 +33,4 @@ vim.api.nvim_set_keymap('v', '<leader>/', ':<C-u>gcc<CR>', { noremap = true, sil
 
 vim.keymap.set("n", "<leader>fml", "<cmd>CellularAutomaton make_it_rain<CR>")
 vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
-- vim: ts=2 sts=2 sw=2 et
+-- vim: ts=2 sts=2 sw=2 et
