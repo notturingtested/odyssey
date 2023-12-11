@@ -20,4 +20,4 @@ ln -sf ~/.odyssey/alacritty ~/.config/alacritty
 ln -sf ~/.odyssey/nvim ~/.config/nvim
 ln -sf ~/.odyssey/ssh ~/.ssh
 ln -sf ~/.odyssey/tmux/tmux.conf ~/.tmux.conf
-
+ln -sf ~/.odyssey/kitty ~/.config/kitty

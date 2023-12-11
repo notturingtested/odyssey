@@ -11,7 +11,7 @@ tap 'homebrew/cask'
 ###################################################################
 
 # Terminal
-cask 'alacritty'
+cask 'kitty'
 cask 'warp'
 cask 'iTerm2'
 

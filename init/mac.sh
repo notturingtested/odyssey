@@ -8,7 +8,7 @@
 set -e
 
 install_brew_packages () {
-  brew bundle --file ./Brewfile
+  brew bundle --file ~/.odyssey/init/Brewfile
   # go to plugins custom and git clone https://github.com/lukechilds/zsh-nvm ~/.oh-my-zsh/custom/plugins/zsh-nvm
   # plugins+=(zsh-nvm)in .zshrc
 }
