@@ -1,4 +1,3 @@
-
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
@@ -13,6 +12,7 @@ vim.api.nvim_set_keymap('i', '<D-v>', '<C-r>=system(\'pbpaste\')<CR>', { noremap
 -- Cut
 vim.api.nvim_set_keymap('v', '<D-x>', ':w !pbcopy<CR><CR>gvd', { noremap = true })
 
+vim.opt.termguicolors = true
 -- [[ Install `lazy.nvim` plugin manager ]]
 require 'lazy-bootstrap'
 
