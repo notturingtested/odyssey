@@ -15,20 +15,12 @@ alias grep='rg'
 alias find='fd'
 alias ipw='ipconfig getifaddr en0'
 alias ipe='ipconfig getifaddr en1'
-" > aliases.zsh
+" >aliases.zsh
 
 {
-echo 'export NVM_DIR="$HOME/.nvm"'
-echo '[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm'
-echo '[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion'
-} >> ~/.zshrc
+	echo 'export NVM_DIR="$HOME/.nvm"'
+	echo '[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm'
+	echo '[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion'
+} >>~/.zshrc
 
-echo 'eval "$(direnv hook zsh)"' >> ~/.zshrc
-
-echo 'SymLinking...'
-ln -sf ~/.odyssey/alacritty ~/.config/alacritty
-ln -sf ~/.odyssey/nvim ~/.config/nvim
-ln -sf ~/.odyssey/ssh ~/.ssh
-ln -sf ~/.odyssey/tmux/tmux.conf ~/.tmux.conf
-ln -sf ~/.odyssey/kitty ~/.config/kitty
-echo 'Complete!'
+echo 'eval "$(direnv hook zsh)"' >>~/.zshrc

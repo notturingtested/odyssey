@@ -32,5 +32,22 @@ vim.api.nvim_set_keymap('n', '<leader>/', 'gcc', { noremap = true, silent = true
 vim.api.nvim_set_keymap('v', '<leader>/', ':<C-u>gcc<CR>', { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>fml", "<cmd>CellularAutomaton make_it_rain<CR>")
-vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
--- vim: ts=2 sts=2 sw=2 et
+-- vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
+-- new formatter
+vim.g.neoformat_try_node_exe = 1
+
+vim.cmd [[autocmd BufWritePre * Neoformat]]
+
+
+
+-- Copy
+vim.api.nvim_set_keymap('n', '<D-c>', ':w !pbcopy<CR><CR>', { noremap = true })
+vim.api.nvim_set_keymap('v', '<D-c>', ':w !pbcopy<CR><CR>', { noremap = true })
+
+-- Paste
+vim.api.nvim_set_keymap('n', '<D-v>', ':r !pbpaste<CR>', { noremap = true })
+vim.api.nvim_set_keymap('i', '<D-v>', '<C-r>=system(\'pbpaste\')<CR>', { noremap = true })
+
+-- Cut
+vim.api.nvim_set_keymap('v', '<D-x>', ':w !pbcopy<CR><CR>gvd', { noremap = true })
+

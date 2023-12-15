@@ -7,24 +7,35 @@
 
 set -e
 
-install_brew_packages () {
+install_brew_packages() {
   brew bundle --file ~/.odyssey/init/Brewfile
   # go to plugins custom and git clone https://github.com/lukechilds/zsh-nvm ~/.oh-my-zsh/custom/plugins/zsh-nvm
   # plugins+=(zsh-nvm)in .zshrc
 }
 
-setup_zsh () {
+setup_zsh() {
   bash ./zsh.sh
 }
 
-symlink () {
-
+symlink() {
+  echo 'SymLinking...'
+  ln -sf ~/.odyssey/alacritty ~/.config/alacritty
+  ln -sf ~/.odyssey/nvim ~/.config/nvim
+  ln -sf ~/.odyssey/ssh ~/.ssh
+  ln -sf ~/.odyssey/tmux/tmux.conf ~/.tmux.conf
+  ln -sf ~/.odyssey/kitty ~/.config/kitty
+  echo 'Complete!'
 }
 
-main () {
+npmPackages() {
+  npm install -g prettier
+}
+
+main() {
   install_brew_packages
   setup_zsh
   symlink
+  npmPackages
 }
 
 main $@

@@ -51,12 +51,19 @@ brew 'gawk'
 brew 'git-delta'
 brew 'pandoc' 
 brew 'ripgrep'
-brew 'shellcheck' # shell script linting
 brew 'tldr' # tldr of the man pages
 brew 'tree'
 brew 'direnv'
 brew 'nvm'
 
+###################################################################
+# Dev Tools
+###################################################################
+
+brew 'stylua'
+brew 'prettier'
+brew 'shellcheck' # shell script linting
+brew 'shfmt' # shell script formatting
 
 ###################################################################
 # Utilities

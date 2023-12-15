@@ -1,5 +1,5 @@
 require('lazy').setup({
-  { import = 'colorscheme'},
+  { import = 'colorscheme' },
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
@@ -93,7 +93,7 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
-  {'kabouzeid/nvim-lspinstall'},
+  { 'kabouzeid/nvim-lspinstall' },
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -198,7 +198,7 @@ require('lazy').setup({
   { "nvim-lua/plenary.nvim",   lazy = true },
   { import = 'ui' },
   { import = 'coding' },
-  { import = 'editor'},
+  { import = 'editor' },
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
@@ -249,7 +249,8 @@ require('lazy').setup({
       })
     end,
   },
-  {'eandrju/cellular-automaton.nvim' },
+  { 'sbdchd/neoformat' },
+  { 'eandrju/cellular-automaton.nvim' },
 }, {})
 
 -- vim: ts=2 sts=2 sw=2 et
