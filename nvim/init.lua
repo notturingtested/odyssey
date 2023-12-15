@@ -13,6 +13,9 @@ vim.api.nvim_set_keymap('i', '<D-v>', '<C-r>=system(\'pbpaste\')<CR>', { noremap
 vim.api.nvim_set_keymap('v', '<D-x>', ':w !pbcopy<CR><CR>gvd', { noremap = true })
 
 vim.opt.termguicolors = true
+
+vim.opt.tabstop = 2
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 require 'lazy-bootstrap'
 
