@@ -94,6 +94,8 @@ return {
         graphql = {},
         dockerls = {},
         vimls = {},
+        docker_compose_language_service = {},
+        sqlls = {},
         lua_ls = {
           Lua = {
             workspace = { checkThirdParty = false },
@@ -136,16 +138,6 @@ return {
         end,
       }
 
-
-      -- hover error messages
-      vim.diagnostic.config { virtual_text = false }
-      vim.api.nvim_create_autocmd({ 'CursorHold' }, {
-        callback = function()
-          if vim.lsp.buf.server_ready() then
-            vim.diagnostic.open_float()
-          end
-        end,
-      })
 
       for type, icon in pairs {
         Error = '',
