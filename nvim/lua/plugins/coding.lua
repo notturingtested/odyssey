@@ -189,6 +189,7 @@ return {
       vim.cmd [[autocmd BufWritePre * Neoformat]]
       vim.g.neoformat_try_node_exe = 1
     end,
+    event = 'VeryLazy',
   },
   {
     'zbirenbaum/copilot.lua',

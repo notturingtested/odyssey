@@ -6,29 +6,27 @@
 
 --  This function gets run when an LSP connects to a particular buffer.
 
-
 return {
   {
+    'williamboman/mason.nvim',
+    config = function()
+      require('mason').setup {
+        ui = {
+          icons = {
+            package_installed = '✓',
+            package_pending = '➜',
+            package_uninstalled = '✗',
+          },
+        },
+      }
+    end,
+  },
+
+  {
     'neovim/nvim-lspconfig',
-    requires = {
-      {
-        'williamboman/mason.nvim',
-        config = function()
-          require('mason').setup()
-        end,
-      },
-      {
-        'williamboman/mason-lspconfig.nvim',
-        config = function()
-          require('mason-lspconfig').setup()
-        end,
-      },
-      {
-        'j-hui/fidget.nvim',
-        config = function()
-          require('fidget').setup {}
-        end,
-      },
+    dependencies = {
+      'williamboman/mason-lspconfig.nvim',
+      'j-hui/fidget.nvim',
       'folke/neodev.nvim',
       'kabouzeid/nvim-lspinstall',
     },
@@ -78,7 +76,6 @@ return {
         -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
       end
 
-
       local servers = {
         gopls = {},
         tsserver = {},
@@ -95,7 +92,6 @@ return {
         dockerls = {},
         vimls = {},
         docker_compose_language_service = {},
-        sqlls = {},
         lua_ls = {
           Lua = {
             workspace = { checkThirdParty = false },
@@ -138,7 +134,6 @@ return {
         end,
       }
 
-
       for type, icon in pairs {
         Error = '',
         Warn = '',
@@ -150,7 +145,6 @@ return {
       end
     end,
     event = 'BufRead',
-
   },
 }
 -- vim: ts=2 sts=2 sw=2 et
