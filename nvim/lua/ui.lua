@@ -3,14 +3,14 @@
 return {
   -- Better `vim.notify()`
   {
-    "rcarriga/nvim-notify",
+    'rcarriga/nvim-notify',
     keys = {
       {
-        "<leader>un",
+        '<leader>un',
         function()
-          require("notify").dismiss({ silent = true, pending = true })
+          require('notify').dismiss { silent = true, pending = true }
         end,
-        desc = "Dismiss all Notifications",
+        desc = 'Dismiss all Notifications',
       },
     },
     opts = {
@@ -28,42 +28,42 @@ return {
     init = function()
       -- when noice is not enabled, install notify on VeryLazy
       -- Util.on_very_lazy(function()
-      vim.notify = require("notify")
+      vim.notify = require 'notify'
       -- end)
-    end
+    end,
   },
 
   -- better vim.ui
   {
-    "stevearc/dressing.nvim",
+    'stevearc/dressing.nvim',
     lazy = true,
     init = function()
       ---@diagnostic disable-next-line: duplicate-set-field
       vim.ui.select = function(...)
-        require("lazy").load({ plugins = { "dressing.nvim" } })
+        require('lazy').load { plugins = { 'dressing.nvim' } }
         return vim.ui.select(...)
       end
       ---@diagnostic disable-next-line: duplicate-set-field
       vim.ui.input = function(...)
-        require("lazy").load({ plugins = { "dressing.nvim" } })
+        require('lazy').load { plugins = { 'dressing.nvim' } }
         return vim.ui.input(...)
       end
     end,
   },
 
   {
-    "akinsho/bufferline.nvim",
-    event = "VeryLazy",
+    'akinsho/bufferline.nvim',
+    event = 'VeryLazy',
     keys = {
-      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>",            desc = "Toggle pin" },
-      { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
-      { "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>",          desc = "Delete other buffers" },
-      { "<leader>br", "<Cmd>BufferLineCloseRight<CR>",           desc = "Delete buffers to the right" },
-      { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>",            desc = "Delete buffers to the left" },
-      { "<S-h>",      "<cmd>BufferLineCyclePrev<cr>",            desc = "Prev buffer" },
-      { "<S-l>",      "<cmd>BufferLineCycleNext<cr>",            desc = "Next buffer" },
-      { "[b",         "<cmd>BufferLineCyclePrev<cr>",            desc = "Prev buffer" },
-      { "]b",         "<cmd>BufferLineCycleNext<cr>",            desc = "Next buffer" },
+      { '<leader>bp', '<Cmd>BufferLineTogglePin<CR>', desc = 'Toggle pin' },
+      { '<leader>bP', '<Cmd>BufferLineGroupClose ungrouped<CR>', desc = 'Delete non-pinned buffers' },
+      { '<leader>bo', '<Cmd>BufferLineCloseOthers<CR>', desc = 'Delete other buffers' },
+      { '<leader>br', '<Cmd>BufferLineCloseRight<CR>', desc = 'Delete buffers to the right' },
+      { '<leader>bl', '<Cmd>BufferLineCloseLeft<CR>', desc = 'Delete buffers to the left' },
+      { '<S-h>', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev buffer' },
+      { '<S-l>', '<cmd>BufferLineCycleNext<cr>', desc = 'Next buffer' },
+      { '[b', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev buffer' },
+      { ']b', '<cmd>BufferLineCycleNext<cr>', desc = 'Next buffer' },
     },
     opts = {
       options = {
@@ -74,25 +74,24 @@ return {
         diagnostics = "nvim_lsp",
         always_show_bufferline = false,
         diagnostics_indicator = function(_, _, diag)
-          local icons = require("config").icons.diagnostics
-          local ret = (diag.error and icons.Error .. diag.error .. " " or "")
-              .. (diag.warning and icons.Warn .. diag.warning or "")
+          local icons = require('config').icons.diagnostics
+          local ret = (diag.error and icons.Error .. diag.error .. ' ' or '') .. (diag.warning and icons.Warn .. diag.warning or '')
           return vim.trim(ret)
         end,
         offsets = {
           {
-            filetype = "neo-tree",
-            text = "Neo-tree",
-            highlight = "Directory",
-            text_align = "left",
+            filetype = 'neo-tree',
+            text = 'Neo-tree',
+            highlight = 'Directory',
+            text_align = 'left',
           },
         },
       },
     },
     config = function(_, opts)
-      require("bufferline").setup(opts)
+      require('bufferline').setup(opts)
       -- Fix bufferline when restoring a session
-      vim.api.nvim_create_autocmd("BufAdd", {
+      vim.api.nvim_create_autocmd('BufAdd', {
         callback = function()
           vim.schedule(function()
             pcall(nvim_bufferline)
@@ -104,13 +103,13 @@ return {
 
   -- statusline
   {
-    "nvim-lualine/lualine.nvim",
-    event = "VeryLazy",
+    'nvim-lualine/lualine.nvim',
+    event = 'VeryLazy',
     init = function()
       vim.g.lualine_laststatus = vim.o.laststatus
       if vim.fn.argc(-1) > 0 then
         -- set an empty statusline till lualine loads
-        vim.o.statusline = " "
+        vim.o.statusline = ' '
       else
         -- hide the statusline on the starter page
         vim.o.laststatus = 0
@@ -118,7 +117,7 @@ return {
     end,
     opts = function()
       -- PERF: we don't need this lualine require madness 🤷
-      local lualine_require = require("lualine_require")
+      local lualine_require = require 'lualine_require'
       lualine_require.require = require
 
       local icons = require('config').icons
@@ -127,13 +126,13 @@ return {
 
       return {
         options = {
-          theme = "auto",
+          theme = 'auto',
           globalstatus = true,
-          disabled_filetypes = { statusline = { "dashboard", "alpha", "starter" } },
+          disabled_filetypes = { statusline = { 'dashboard', 'alpha', 'starter' } },
         },
         sections = {
-          lualine_a = { "mode" },
-          lualine_b = { "branch" },
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch' },
 
           -- lualine_c = {
           --   Util.root_dir(),
@@ -169,12 +168,12 @@ return {
               -- color = Util.fg("Debug"),
             },
             {
-              require("lazy.status").updates,
-              cond = require("lazy.status").has_updates,
+              require('lazy.status').updates,
+              cond = require('lazy.status').has_updates,
               -- color = Util.fg("Special"),
             },
             {
-              "diff",
+              'diff',
               symbols = {
                 added = icons.git.added,
                 modified = icons.git.modified,
@@ -193,75 +192,75 @@ return {
             },
           },
           lualine_y = {
-            { "progress", separator = " ",                  padding = { left = 1, right = 0 } },
-            { "location", padding = { left = 0, right = 1 } },
+            { 'progress', separator = ' ', padding = { left = 1, right = 0 } },
+            { 'location', padding = { left = 0, right = 1 } },
           },
           lualine_z = {
             function()
-              return " " .. os.date("%R")
+              return ' ' .. os.date '%R'
             end,
           },
         },
-        extensions = { "neo-tree", "lazy" },
+        extensions = { 'neo-tree', 'lazy' },
       }
     end,
   },
 
   -- indent guides for Neovim
   {
-    "lukas-reineke/indent-blankline.nvim",
-    event = "VeryLazy",
+    'lukas-reineke/indent-blankline.nvim',
+    event = 'VeryLazy',
     opts = {
       indent = {
-        char = "│",
-        tab_char = "│",
+        char = '│',
+        tab_char = '│',
       },
       scope = { enabled = false },
       exclude = {
         filetypes = {
-          "help",
-          "alpha",
-          "dashboard",
-          "neo-tree",
-          "Trouble",
-          "trouble",
-          "lazy",
-          "mason",
-          "notify",
-          "toggleterm",
-          "lazyterm",
+          'help',
+          'alpha',
+          'dashboard',
+          'neo-tree',
+          'Trouble',
+          'trouble',
+          'lazy',
+          'mason',
+          'notify',
+          'toggleterm',
+          'lazyterm',
         },
       },
     },
-    main = "ibl",
+    main = 'ibl',
   },
 
   -- Active indent guide and indent text objects. When you're browsing
   -- code, this highlights the current level of indentation, and animates
   -- the highlighting.
   {
-    "echasnovski/mini.indentscope",
+    'echasnovski/mini.indentscope',
     version = false, -- wait till new 0.7.0 release to put it back on semver
-    event = "VeryLazy",
+    event = 'VeryLazy',
     opts = {
       -- symbol = "▏",
-      symbol = "│",
+      symbol = '│',
       options = { try_as_border = true },
     },
     init = function()
-      vim.api.nvim_create_autocmd("FileType", {
+      vim.api.nvim_create_autocmd('FileType', {
         pattern = {
-          "help",
-          "alpha",
-          "dashboard",
-          "neo-tree",
-          "Trouble",
-          "trouble",
-          "lazy",
-          "mason",
-          "notify",
-          "toggleterm",
-          "lazyterm",
+          'help',
+          'alpha',
+          'dashboard',
+          'neo-tree',
+          'Trouble',
+          'trouble',
+          'lazy',
+          'mason',
+          'notify',
+          'toggleterm',
+          'lazyterm',
         },
         callback = function()
           vim.b.miniindentscope_disable = true
@@ -272,32 +271,32 @@ return {
 
   -- Displays a popup with possible key bindings of the command you started typing
   {
-    "folke/which-key.nvim",
+    'folke/which-key.nvim',
   },
 
   -- Highly experimental plugin that completely replaces the UI for messages, cmdline and the popupmenu.
   {
-    "folke/noice.nvim",
-    event = "VeryLazy",
+    'folke/noice.nvim',
+    event = 'VeryLazy',
     opts = {
       lsp = {
         override = {
-          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-          ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true,
+          ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+          ['vim.lsp.util.stylize_markdown'] = true,
+          ['cmp.entry.get_documentation'] = true,
         },
       },
       routes = {
         {
           filter = {
-            event = "msg_show",
+            event = 'msg_show',
             any = {
-              { find = "%d+L, %d+B" },
-              { find = "; after #%d+" },
-              { find = "; before #%d+" },
+              { find = '%d+L, %d+B' },
+              { find = '; after #%d+' },
+              { find = '; before #%d+' },
             },
           },
-          view = "mini",
+          view = 'mini',
         },
       },
       presets = {
@@ -320,21 +319,21 @@ return {
   },
 
   -- icons
-  { "nvim-tree/nvim-web-devicons", lazy = true },
+  { 'nvim-tree/nvim-web-devicons', lazy = true },
 
   -- ui components
-  { "MunifTanjim/nui.nvim",        lazy = true },
+  { 'MunifTanjim/nui.nvim', lazy = true },
 
   {
-    "goolord/alpha-nvim",
+    'goolord/alpha-nvim',
     optional = true,
     enabled = function()
       return false
     end,
   },
   {
-    "nvimdev/dashboard-nvim",
-    event = "VimEnter",
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
     opts = function()
       local logo = [[
   ████╗   ███████═╗ ██╗   ██╗ ███████╗ ███████╗  ███████╗ ██╗   ██╗
@@ -343,19 +342,19 @@ return {
 ██║   ██║ ██║   ██║   ╚██╔╝   ╚════██║ ╚════██║  ██╔══╝     ╚██╔╝⠀⠀
 ╚═████╔═╝ ███████╔╝    ██║    ███████║ ███████║  ███████╗    ██║⠀⠀⠀
   ╚═══╝   ╚══════╝     ╚═╝    ╚══════╝ ╚══════╝  ╚══════╝    ╚═╝⠀⠀⠀
-   ,(   ,(  ,(   ,(  ,(   ,(  ,(   ,(   ,(   ,(   ,(  ,(   ,(⠀⠀⠀
-`-'  `-' `-'  `-' `-'  `-' `-'  `-'  `-'  `-' `-'  `-'  `-'  `-
+   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(⠀⠀⠀
+`-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-
   ]]
-      logo = string.rep("\n", 8) .. logo .. "\n\n"
+      logo = string.rep('\n', 8) .. logo .. '\n\n'
       local opts = {
-        theme = "doom",
+        theme = 'doom',
         hide = {
           -- this is taken care of by lualine
           -- enabling this messes up the actual laststatus setting after loading a file
           statusline = false,
         },
         config = {
-          header = vim.split(logo, "\n"),
+          header = vim.split(logo, '\n'),
           -- stylua: ignore
           center = {
             { action = "Telescope find_files", desc = " Find file", icon = " ", key = "f" },
@@ -369,25 +368,25 @@ return {
             { action = "qa", desc = " Quit", icon = " ", key = "q" },
           },
           footer = function()
-            local stats = require("lazy").stats()
+            local stats = require('lazy').stats()
             local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-            return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
+            return { '⚡ Neovim loaded ' .. stats.loaded .. '/' .. stats.count .. ' plugins in ' .. ms .. 'ms' }
           end,
         },
       }
 
       for _, button in ipairs(opts.config.center) do
-        button.desc = button.desc .. string.rep(" ", 43 - #button.desc)
-        button.key_format = "  %s"
+        button.desc = button.desc .. string.rep(' ', 43 - #button.desc)
+        button.key_format = '  %s'
       end
 
       -- close Lazy and re-open when the dashboard is ready
-      if vim.o.filetype == "lazy" then
+      if vim.o.filetype == 'lazy' then
         vim.cmd.close()
-        vim.api.nvim_create_autocmd("User", {
-          pattern = "DashboardLoaded",
+        vim.api.nvim_create_autocmd('User', {
+          pattern = 'DashboardLoaded',
           callback = function()
-            require("lazy").show()
+            require('lazy').show()
           end,
         })
       end
