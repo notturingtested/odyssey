@@ -91,6 +91,7 @@ return {
         graphql = {},
         dockerls = {},
         vimls = {},
+        sqlls = {},
         docker_compose_language_service = {},
         lua_ls = {
           Lua = {
@@ -102,6 +103,11 @@ return {
         },
       }
 
+      require('neodev').setup()
+
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
       for server, config in pairs(servers) do
         require('lspconfig')[server].setup {
           capabilities = capabilities,
@@ -110,12 +116,6 @@ return {
           filetypes = config.filetypes,
         }
       end
-
-      require('neodev').setup()
-
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
       -- Ensure the servers above are installed
       local mason_lspconfig = require 'mason-lspconfig'
 

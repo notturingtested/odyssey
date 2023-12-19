@@ -1,7 +1,7 @@
 -- [[ Setting options ]]
--- See `:help vim.o`
--- NOTE: You can change these options as you wish!
-
+-- Set Leader Key
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 -- Set highlight on search
 vim.o.hlsearch = false
 
@@ -38,8 +38,6 @@ vim.o.completeopt = 'menuone,noselect'
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
-
-
 vim.opt.termguicolors = true
 
 vim.opt.tabstop = 2
