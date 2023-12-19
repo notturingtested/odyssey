@@ -27,7 +27,7 @@ cask 'docker'
 cask 'tableplus'
 cask 'postman'
 cask 'gpg-suite-no-mail'
-
+cask 'neovide'
 
 
 ###################################################################
