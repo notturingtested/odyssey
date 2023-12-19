@@ -61,7 +61,7 @@ brew 'nvm'
 ###################################################################
 
 brew 'stylua'
-brew 'prettier'
+brew 'fsouza/prettierd/prettierd'
 brew 'shellcheck' # shell script linting
 brew 'shfmt' # shell script formatting
 
