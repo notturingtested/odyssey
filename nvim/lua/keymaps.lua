@@ -38,3 +38,6 @@ vim.api.nvim_set_keymap('i', '<D-v>', "<C-r>=system('pbpaste')<CR>", { noremap =
 
 -- Cut
 vim.api.nvim_set_keymap('v', '<D-x>', ':w !pbcopy<CR><CR>gvd', { noremap = true })
+
+-- Set Escape to exit terminal mode
+vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
