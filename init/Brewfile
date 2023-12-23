@@ -21,6 +21,8 @@ cask 'amethyst'
 cask 'maccy'
 cask 'brave-browser'
 cask 'slack'
+cask 'orion'
+cask 'spotify'
 
 # Code
 cask 'docker'
