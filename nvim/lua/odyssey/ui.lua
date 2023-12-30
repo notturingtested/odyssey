@@ -36,7 +36,7 @@ return {
   -- better vim.ui
   {
     'stevearc/dressing.nvim',
-    lazy = true,
+    -- lazy = true,
     init = function()
       ---@diagnostic disable-next-line: duplicate-set-field
       vim.ui.select = function(...)
