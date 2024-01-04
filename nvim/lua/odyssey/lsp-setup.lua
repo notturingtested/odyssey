@@ -1,11 +1,3 @@
--- [[ Configure LSP ]]
---
---
--- NOTE: This is where your plugins related to LSP can be installed.
---  The configuration is done below. Search for lspconfig to find it below.
-
---  This function gets run when an LSP connects to a particular buffer.
-
 return {
 
   {
@@ -81,7 +73,6 @@ return {
         'toml',
         'tsx',
         'typescript',
-        'vue',
         'vim',
         'vimdoc',
         'yaml',
