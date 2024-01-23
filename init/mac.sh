@@ -24,6 +24,7 @@ symlink() {
   ln -sf ~/.odyssey/ssh ~/.ssh
   ln -sf ~/.odyssey/tmux/tmux.conf ~/.tmux.conf
   ln -sf ~/.odyssey/kitty ~/.config/kitty
+  ln -sf ~/.odyssey/git/gitconfig ~/.gitconfig
   echo 'Complete!'
 }
 

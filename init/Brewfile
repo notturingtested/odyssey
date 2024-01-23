@@ -22,7 +22,7 @@ cask 'maccy'
 cask 'brave-browser'
 cask 'google-chrome'
 cask 'firefox'
-gask 'slack'
+cask 'slack'
 cask 'orion'
 cask 'spotify'
 
@@ -59,6 +59,7 @@ brew 'tldr' # tldr of the man pages
 brew 'tree'
 brew 'direnv'
 brew 'nvm'
+brew 'lazygit'
 
 ###################################################################
 # Dev Tools

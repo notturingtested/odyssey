@@ -1,0 +1,16 @@
+[user]
+	name = Braydn
+	email = tcrbraydn@gmail.com
+	signingkey = CDB592367F0A40E9
+[commit]
+	gpgsign = true
+[pull]
+	rebase = true
+[core]
+	editor = nvim
+[push]
+	autoSetupRemote = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[credential]
+	helper = store

@@ -367,5 +367,4 @@ return {
       { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>",    desc = "Todo/Fix/Fixme" },
     },
   },
-  { 'Pocco81/auto-save.nvim' },
 }
