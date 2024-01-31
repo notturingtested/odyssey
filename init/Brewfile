@@ -4,8 +4,6 @@
 #Author        Braydn Tanner
 ###################################################################
 
-tap 'homebrew/cask'
-
 ###################################################################
 # GUI Applications
 ###################################################################
@@ -25,6 +23,7 @@ cask 'firefox'
 cask 'slack'
 cask 'orion'
 cask 'spotify'
+brew 'pomatez'
 
 # Code
 cask 'docker'
@@ -79,6 +78,7 @@ brew 'kubectx'
 brew 'bitwarden-cli'
 brew 'k9s'
 brew 'awscli'
+brew 'kubent'
 
 ###################################################################
 # Languages
