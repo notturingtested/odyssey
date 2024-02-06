@@ -199,7 +199,11 @@ return {
   {
     'sbdchd/neoformat',
     config = function()
-      vim.cmd [[autocmd BufWritePre * Neoformat]]
+      vim.cmd [[augroup fmt
+  autocmd!
+  autocmd BufWritePre * undojoin | Neoformat
+augroup END]]
+      -- vim.cmd [[autocmd BufWritePre * Neoformat]]
       vim.g.neoformat_try_node_exe = 1
     end,
     event = 'VeryLazy',
