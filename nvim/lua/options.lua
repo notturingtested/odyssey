@@ -46,6 +46,7 @@ if vim.g.neovide then
   vim.g.neovide_transparency = 0.75
   vim.g.neovide_input_macos_alt_is_meta = true
 end
-
+-- Font
 vim.opt.guifont = 'Hack Nerd Font:h14'
+
 -- vim: ts=2 sts=2 sw=2 et
