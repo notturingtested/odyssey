@@ -39,7 +39,7 @@ cask 'neovide'
 
 brew 'vim'
 brew 'neovim'
-brew 'exa'
+brew 'eza'
 brew 'bat'
 brew 'ripgrep'
 brew 'fzf'

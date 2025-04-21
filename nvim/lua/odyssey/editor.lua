@@ -63,6 +63,18 @@ return {
         if stat and stat.type == 'directory' then
           require 'neo-tree'
         end
+        -- Automatically close Neo-tree when it’s the last buffer
+        vim.api.nvim_create_autocmd('BufEnter', {
+          callback = function()
+            -- Get the number of listed buffers that are open
+            local listed_buffers = vim.fn.len(vim.fn.getbufinfo { buflisted = 1 })
+
+            -- If Neo-tree is the only open buffer, close it
+            if listed_buffers == 1 and vim.bo.filetype == 'neo-tree' then
+              vim.cmd 'q' -- close the window
+            end
+          end,
+        })
       end
     end,
     opts = {

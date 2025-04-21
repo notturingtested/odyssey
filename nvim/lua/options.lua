@@ -43,7 +43,7 @@ vim.opt.termguicolors = true
 vim.opt.tabstop = 2
 
 if vim.g.neovide then
-  vim.g.neovide_transparency = 0.75
+  -- vim.g.neovide_transparency = 0.75
   vim.g.neovide_input_macos_alt_is_meta = true
 end
 

@@ -9,7 +9,7 @@ fi
 
 cd ~/.oh-my-zsh/custom
 echo 'Adding Aliases...'
-echo "alias ls='exa -a'
+echo "alias ls='eza -a'
 alias cat='bat'
 alias grep='rg'
 alias find='fd'
