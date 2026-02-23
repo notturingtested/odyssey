@@ -101,12 +101,16 @@ verify_webui() {
 # ── Verify Tailscale Serve ────────────────────────────────
 verify_tailscale_serve() {
     step "Configuring Tailscale Serve..."
-    sudo systemctl start tailscale-serve 2>/dev/null || true
 
+    # Configure serves (idempotent, safe to run again)
+    sudo tailscale serve --bg --https=443 http://localhost:3000 2>/dev/null || true
+    sudo tailscale serve --bg --https=11434 http://localhost:11434 2>/dev/null || true
+
+    # Check status
     if tailscale serve status 2>/dev/null | grep -q "443"; then
         ok "Tailscale Serve is running (HTTPS on ports 443, 11434)"
     else
-        warn "Tailscale Serve may not be active yet — will start on next boot"
+        warn "Tailscale Serve may not be active yet — run 'tailscale serve status' to check"
     fi
 }
 
