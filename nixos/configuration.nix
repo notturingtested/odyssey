@@ -66,12 +66,11 @@
     description = "Configure Tailscale Serve for AI services";
     after = [ "tailscaled.service" ];
     wants = [ "tailscaled.service" ];
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = lib.mkForce [];  # don't auto-start on boot
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
       ExecStart = pkgs.writeShellScript "tailscale-serve-setup" ''
-        # Wait for tailscale to be connected
         while ! ${pkgs.tailscale}/bin/tailscale status > /dev/null 2>&1; do
           sleep 2
         done
