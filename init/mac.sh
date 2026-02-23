@@ -17,6 +17,9 @@ install_brew_packages() {
   if [[ "$reply" =~ ^[Yy]$ ]]; then
     brew bundle --file ~/.odyssey/init/Brewfile.work
   fi
+  echo "******************************************************************"
+  echo -e '\033[1;31mRemember to install Bitwarden from the App Store!\033[0m'
+  echo "******************************************************************"
 }
 
 setup_zsh() {

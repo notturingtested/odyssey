@@ -14,7 +14,7 @@ cask 'warp'
 cask 'iTerm2'
 
 # Productivity
-cask 'bitwarden'
+# cask 'bitwarden' Intentionally commented. Needs to be installed from App Store for touch ID. 
 cask 'amethyst'
 cask 'maccy'
 cask 'brave-browser'
