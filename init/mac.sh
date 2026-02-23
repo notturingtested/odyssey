@@ -33,15 +33,16 @@ print_banner() {
 }
 
 install_brew_packages() {
+  local dir="${0:A:h}"
   step "Installing Homebrew packages..."
-  brew bundle --verbose --file ~/.odyssey/init/Brewfile
+  brew bundle --verbose --file "$dir/Brewfile"
   ok "Homebrew packages installed"
 
   echo ""
   read "reply?Install work packages? (y/n) "
   if [[ "$reply" =~ ^[Yy]$ ]]; then
     step "Installing work packages..."
-    brew bundle --verbose --file ~/.odyssey/init/Brewfile.work
+    brew bundle --verbose --file "$dir/Brewfile.work"
     ok "Work packages installed"
   fi
   echo ""
@@ -50,7 +51,7 @@ install_brew_packages() {
 
 setup_zsh() {
   step "Setting up Zsh..."
-  bash ~/.odyssey/init/zsh.sh
+  bash "${0:A:h}/zsh.sh"
   ok "Zsh configured"
 }
 
