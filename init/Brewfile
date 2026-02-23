@@ -27,18 +27,17 @@ cask 'spotify'
 cask 'scroll-reverser'
 cask 'hammerspoon'
 cask 'karabiner-elements'
-cask 'tailscale'
+cask 'tailscale-app'
 cask 'background-music'
 brew 'pomatez'
 
 # Code
-cask 'docker'
 cask 'docker-desktop'
 cask 'visual-studio-code'
 cask 'tableplus'
 cask 'postman'
 cask 'gpg-suite-no-mail'
-cask 'neovide'
+cask 'neovide-app'
 
 
 ###################################################################
