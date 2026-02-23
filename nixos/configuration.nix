@@ -86,7 +86,7 @@
     curl
     git
     htop
-    nvtop
+    nvtopPackages.nvidia
     jq
     cudaPackages.cudatoolkit
   ];
