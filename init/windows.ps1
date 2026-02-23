@@ -239,7 +239,7 @@ function Main {
     Write-Host ""
     Write-Host "===== Setup Complete =====" -ForegroundColor Green
     Write-Host "Next Steps:"
-    Write-Host "Copy bootstrap-setup.sh into nixos, chmod and run"
+    Write-Host 'Run: nix-shell -p curl --run "bash <(curl -fsSL https://raw.githubusercontent.com/notturingtested/odyssey/main/init/bootstrap-nixos.sh)"'
     Write-Host "Launching NixOS..." -ForegroundColor Cyan
     wsl -d NixOS
 }
