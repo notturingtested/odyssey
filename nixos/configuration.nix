@@ -24,7 +24,7 @@
   # ── Ollama ────────────────────────────────────────────
   services.ollama = {
     enable = true;
-    acceleration = pkgs.ollama-cuda;
+    package = pkgs.ollama-cuda;
     host = "0.0.0.0";
     port = 11434;
     home = "/mnt/c/ai-models";
