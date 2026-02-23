@@ -19,6 +19,13 @@
     modesetting.enable = true;
   };
   hardware.graphics.enable = true;
+  hardware.nvidia-container-toolkit.enable = true;
+  hardware.nvidia-container-toolkit.suppressNvidiaDriverAssertion = true;
+
+  # ── WSL NVIDIA Driver Path ────────────────────────────
+  environment.sessionVariables = {
+    LD_LIBRARY_PATH = "/usr/lib/wsl/lib";
+  };
 
   # ── Ollama ────────────────────────────────────────────
   services.ollama = {
@@ -83,6 +90,7 @@
     curl
     git
     htop
+    vim
     nvtopPackages.nvidia
     jq
     cudaPackages.cudatoolkit
