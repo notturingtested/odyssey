@@ -1,5 +1,4 @@
 { config, pkgs, lib, ... }:
-
 {
   # ── WSL ────────────────────────────────────────────────
   wsl = {
@@ -25,20 +24,19 @@
   services.ollama = {
     enable = true;
     package = pkgs.ollama-cuda;
+    # Acceleration options:
+    # pkgs.ollama-cuda      NVIDIA GPU
+    # pkgs.ollama-rocm      AMD GPU
+    # pkgs.ollama-vulkan    Vulkan (experimental)
+    # pkgs.ollama-cpu       CPU only
+    # pkgs.ollama           Default (usually CPU)
     host = "0.0.0.0";
     port = 11434;
     home = "/mnt/c/ai-models";
   };
-  #Options for acceleration ^
-  # pkgs.ollama-cuda                  NVIDIA GPU
-  # pkgs.ollama-rocm                  AMD 
-  # GPUpkgs.ollama-vulkan             Vulkan 
-  # (experimental) pkgs.ollama-cpu     CPU 
-  # onlypkgs.ollama                   Default (usually CPU)
-  
-# ── Open WebUI (OCI container) ────────────────────────
-  virtualisation.podman.enable = true;
 
+  # ── Open WebUI (OCI container) ────────────────────────
+  virtualisation.podman.enable = true;
   virtualisation.oci-containers = {
     backend = "podman";
     containers.open-webui = {
@@ -61,12 +59,12 @@
   };
 
   # ── Tailscale Serve (expose services over tailnet) ───
-  # Configured via systemd oneshot that runs after tailscaled
+  # Started manually by setup script after tailscale auth
   systemd.services.tailscale-serve = {
     description = "Configure Tailscale Serve for AI services";
     after = [ "tailscaled.service" ];
     wants = [ "tailscaled.service" ];
-    wantedBy = lib.mkForce [];  # don't auto-start on boot
+    wantedBy = lib.mkForce [];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
@@ -91,7 +89,7 @@
   ];
 
   # ── Networking ────────────────────────────────────────
-  networking.hostName = "ai-server";
+  networking.hostName = "smooth-operator";
   networking.firewall = {
     enable = true;
     trustedInterfaces = [ "tailscale0" ];
