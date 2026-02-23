@@ -15,18 +15,28 @@ function Write-Warn { param([string]$msg) Write-Host "   WARN: $msg" -Foreground
 function Install-WSL {
     Write-Step "Checking WSL installation..."
 
-    $wslStatus = wsl --status 2>&1
-    if ($LASTEXITCODE -ne 0) {
-        Write-Step "Enabling WSL2..."
+    # Temporarily allow failure without killing script
+    $prevPref = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+
+    wsl --status > $null 2>&1
+    $wslInstalled = $LASTEXITCODE -eq 0
+
+    $ErrorActionPreference = $prevPref
+
+    if (-not $wslInstalled) {
+        Write-Step "WSL not found. Installing WSL2..."
         wsl --install --no-distribution
+
         Write-Host ""
         Write-Host "================================================================" -ForegroundColor Yellow
         Write-Host "  REBOOT REQUIRED" -ForegroundColor Yellow
         Write-Host "  WSL2 has been enabled. Please reboot, then re-run:" -ForegroundColor Yellow
-        Write-Host "  .\init\windows.ps1" -ForegroundColor White
+        Write-Host "  .\setup.ps1" -ForegroundColor White
         Write-Host "================================================================" -ForegroundColor Yellow
         exit 0
     }
+
     Write-Ok "WSL2 is installed"
 }
 
