@@ -87,9 +87,6 @@ function New-AIDirs {
 function Copy-NixConfig {
     Write-Step "Copying NixOS configuration into WSL..."
 
-    $scriptDir = Split-Path -Parent $PSScriptRoot
-    $nixosSource = Join-Path $scriptDir "nixos"
-
     wsl -d NixOS -- bash -c "sudo mkdir -p /etc/nixos"
     wsl -d NixOS -- bash -c "sudo cp -r /mnt/c/Users/$env:USERNAME/.odyssey/nixos/* /etc/nixos/"
 
