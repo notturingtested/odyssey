@@ -7,6 +7,8 @@
 
 set -e
 
+SCRIPT_DIR="${0:A:h}"
+
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
@@ -33,16 +35,15 @@ print_banner() {
 }
 
 install_brew_packages() {
-  local dir="${0:A:h}"
   step "Installing Homebrew packages..."
-  brew bundle --verbose --file "$dir/Brewfile"
+  brew bundle --verbose --file "$SCRIPT_DIR/Brewfile"
   ok "Homebrew packages installed"
 
   echo ""
   read "reply?Install work packages? (y/n) "
   if [[ "$reply" =~ ^[Yy]$ ]]; then
     step "Installing work packages..."
-    brew bundle --verbose --file "$dir/Brewfile.work"
+    brew bundle --verbose --file "$SCRIPT_DIR/Brewfile.work"
     ok "Work packages installed"
   fi
   echo ""
@@ -51,7 +52,7 @@ install_brew_packages() {
 
 setup_zsh() {
   step "Setting up Zsh..."
-  bash "${0:A:h}/zsh.sh"
+  bash "$SCRIPT_DIR/zsh.sh"
   ok "Zsh configured"
 }
 
