@@ -50,7 +50,7 @@ install_brew_packages() {
 
 setup_zsh() {
   step "Setting up Zsh..."
-  bash ./zsh.sh
+  bash ~/.odyssey/init/zsh.sh
   ok "Zsh configured"
 }
 
@@ -80,7 +80,7 @@ main() {
   print_banner
   printf "${CYAN}===== Odyssey: Mac Setup =====${NC}\n"
 
-  install_brew_packages
+  # install_brew_packages
   setup_zsh
   symlink
   npmPackages
