@@ -112,8 +112,20 @@ function Set-WSLAutoStart {
     Write-Ok "WSL will auto-start on login"
 }
 
+# ── Banner ────────────────────────────────────────────────
+function Write-Banner {
+    Write-Host ""
+    Write-Host "   ________  ________  ________  ________  ________  ________      _______   ________  ________  ________  ________  ________  ________  ________ " -ForegroundColor Magenta
+    Write-Host "  /        \/        \/        \/        \/        \/    /   \    /       \\/        \/        \/        \/        \/        \/        \/        \" -ForegroundColor Magenta
+    Write-Host " /        _/         /         /         /        _/         /   /        //         /         /         /         /        _/         /         /" -ForegroundColor Magenta
+    Write-Host "/-        /         /         /         //       //         /   /         /       __/        _/        _/         //       //         /        _/ " -ForegroundColor Magenta
+    Write-Host "\_______//\__/__/__/\________/\________/ \______/ \___/____/    \________/\______/  \________/\____/___/\___/____/ \______/ \________/\____/___/  " -ForegroundColor Magenta
+    Write-Host ""
+}
+
 # ── Main ─────────────────────────────────────────────────
 function Main {
+    Write-Banner
     Write-Host "===== Odyssey: Windows AI Server Setup =====" -ForegroundColor Magenta
 
     Install-WSL
