@@ -11,6 +11,12 @@ install_brew_packages() {
   brew bundle --file ~/.odyssey/init/Brewfile
   # go to plugins custom and git clone https://github.com/lukechilds/zsh-nvm ~/.oh-my-zsh/custom/plugins/zsh-nvm
   # plugins+=(zsh-nvm)in .zshrc
+
+  echo ""
+  read "reply?Install work packages? (y/n) "
+  if [[ "$reply" =~ ^[Yy]$ ]]; then
+    brew bundle --file ~/.odyssey/init/Brewfile.work
+  fi
 }
 
 setup_zsh() {
