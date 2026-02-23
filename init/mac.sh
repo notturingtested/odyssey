@@ -34,14 +34,14 @@ print_banner() {
 
 install_brew_packages() {
   step "Installing Homebrew packages..."
-  brew bundle --file ~/.odyssey/init/Brewfile
+  brew bundle --verbose --file ~/.odyssey/init/Brewfile
   ok "Homebrew packages installed"
 
   echo ""
   read "reply?Install work packages? (y/n) "
   if [[ "$reply" =~ ^[Yy]$ ]]; then
     step "Installing work packages..."
-    brew bundle --file ~/.odyssey/init/Brewfile.work
+    brew bundle --verbose --file ~/.odyssey/init/Brewfile.work
     ok "Work packages installed"
   fi
   echo ""
