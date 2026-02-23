@@ -98,20 +98,37 @@ verify_webui() {
     fi
 }
 
+# ── Verify Tailscale Serve ────────────────────────────────
+verify_tailscale_serve() {
+    step "Configuring Tailscale Serve..."
+    sudo systemctl start tailscale-serve 2>/dev/null || true
+
+    if tailscale serve status 2>/dev/null | grep -q "443"; then
+        ok "Tailscale Serve is running (HTTPS on ports 443, 11434)"
+    else
+        warn "Tailscale Serve may not be active yet — will start on next boot"
+    fi
+}
+
 # ── Print Summary ────────────────────────────────────────
 print_summary() {
     TAILSCALE_IP=$(tailscale ip -4 2>/dev/null || echo "<tailscale-ip>")
+    TS_HOSTNAME=$(tailscale status --self=true --peers=false 2>/dev/null | awk '{print $2}' || echo "<hostname>")
     HOSTNAME=$(hostname)
 
     echo ""
     echo -e "${GREEN}===== Phase 2 Complete =====${NC}"
     echo ""
     echo -e "${YELLOW}SERVICES RUNNING:${NC}"
-    echo "  Ollama:     http://localhost:11434"
-    echo "  Open WebUI: http://localhost:3000"
-    echo "  Tailscale:  $TAILSCALE_IP ($HOSTNAME)"
+    echo "  Ollama:          http://localhost:11434"
+    echo "  Open WebUI:      http://localhost:3000"
+    echo "  Tailscale:       $TAILSCALE_IP ($HOSTNAME)"
     echo ""
-    echo -e "${YELLOW}ACCESS FROM OTHER DEVICES (via Tailscale):${NC}"
+    echo -e "${YELLOW}TAILSCALE SERVE (HTTPS via tailnet):${NC}"
+    echo -e "  Open WebUI: ${CYAN}https://${TS_HOSTNAME}${NC}"
+    echo -e "  Ollama API: ${CYAN}https://${TS_HOSTNAME}:11434${NC}"
+    echo ""
+    echo -e "${YELLOW}ACCESS FROM OTHER DEVICES (via Tailscale IP):${NC}"
     echo -e "  Open WebUI: ${CYAN}http://$TAILSCALE_IP:3000${NC}"
     echo -e "  Ollama API: ${CYAN}http://$TAILSCALE_IP:11434${NC}"
     echo ""
@@ -119,14 +136,14 @@ print_summary() {
     echo -e "  1. Pull your first model:"
     echo -e "     ${CYAN}ollama pull llama3.2${NC}"
     echo -e "  2. Open WebUI in a browser from any Tailscale device:"
-    echo -e "     ${CYAN}http://$TAILSCALE_IP:3000${NC}"
+    echo -e "     ${CYAN}https://${TS_HOSTNAME}${NC}"
     echo -e "  3. Create your Open WebUI admin account on first visit"
     echo -e "  4. To monitor GPU usage:"
     echo -e "     ${CYAN}nvtop${NC}"
     echo -e "  5. Models are stored at: ${CYAN}C:\\ai-models${NC} (Windows) / ${CYAN}/mnt/c/ai-models${NC} (WSL)"
     echo ""
     echo -e "${YELLOW}AUTO-START:${NC}"
-    echo "  All services start automatically when WSL boots."
+    echo "  All services (including Tailscale Serve) start automatically when WSL boots."
     echo "  WSL starts automatically on Windows login (via Scheduled Task)."
     echo "  If the PC is on and logged in, everything is accessible over Tailscale."
     echo ""
@@ -154,6 +171,7 @@ main() {
     setup_tailscale
     verify_ollama
     verify_webui
+    verify_tailscale_serve
     print_summary
 }
 

@@ -36,19 +36,28 @@ alias ipe='ipconfig getifaddr en1'
 ok "Aliases written to aliases.zsh"
 
 step "Configuring NVM..."
-{
-	echo 'export NVM_DIR="$HOME/.nvm"'
-	echo '[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm'
-	echo '[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion'
-} >>~/.zshrc
-ok "NVM configured"
+if ! grep -q 'export NVM_DIR' ~/.zshrc 2>/dev/null; then
+	{
+		echo 'export NVM_DIR="$HOME/.nvm"'
+		echo '[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm'
+		echo '[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion'
+	} >>~/.zshrc
+	ok "NVM configured"
+else
+	ok "NVM already configured"
+fi
 
 step "Configuring direnv..."
-echo 'eval "$(direnv hook zsh)"' >>~/.zshrc
-ok "direnv hook added"
+if ! grep -q 'direnv hook zsh' ~/.zshrc 2>/dev/null; then
+	echo 'eval "$(direnv hook zsh)"' >>~/.zshrc
+	ok "direnv hook added"
+else
+	ok "direnv hook already present"
+fi
 
 step "Adding Odyssey banner to shell startup..."
-cat >> ~/.zshrc << 'BANNER'
+if ! grep -q 'odyssey_banner' ~/.zshrc 2>/dev/null; then
+	cat >> ~/.zshrc << 'BANNER'
 
 # Odyssey banner
 odyssey_banner() {
@@ -65,4 +74,7 @@ odyssey_banner() {
 }
 odyssey_banner
 BANNER
-ok "Odyssey banner added to .zshrc"
+	ok "Odyssey banner added to .zshrc"
+else
+	ok "Odyssey banner already in .zshrc"
+fi

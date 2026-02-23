@@ -54,6 +54,27 @@
     useRoutingFeatures = "both";
   };
 
+  # ── Tailscale Serve (expose services over tailnet) ───
+  # Configured via systemd oneshot that runs after tailscaled
+  systemd.services.tailscale-serve = {
+    description = "Configure Tailscale Serve for AI services";
+    after = [ "tailscaled.service" ];
+    wants = [ "tailscaled.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = pkgs.writeShellScript "tailscale-serve-setup" ''
+        # Wait for tailscale to be connected
+        while ! ${pkgs.tailscale}/bin/tailscale status > /dev/null 2>&1; do
+          sleep 2
+        done
+        ${pkgs.tailscale}/bin/tailscale serve --bg --https=443 http://localhost:3000
+        ${pkgs.tailscale}/bin/tailscale serve --bg --https=11434 http://localhost:11434
+      '';
+    };
+  };
+
   # ── Base Packages ─────────────────────────────────────
   environment.systemPackages = with pkgs; [
     curl
