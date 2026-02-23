@@ -82,7 +82,7 @@ main() {
   print_banner
   printf "${CYAN}===== Odyssey: Mac Setup =====${NC}\n"
 
-  # install_brew_packages
+  install_brew_packages
   setup_zsh
   symlink
   npmPackages
