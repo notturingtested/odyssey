@@ -14,22 +14,22 @@ RED='\033[0;31m'
 MAGENTA='\033[0;35m'
 NC='\033[0m'
 
-step() { echo -e "\n${CYAN}>> $1${NC}"; }
-ok() { echo -e "   ${GREEN}OK: $1${NC}"; }
-warn() { echo -e "   ${YELLOW}WARN: $1${NC}"; }
-fail() { echo -e "   ${RED}FAIL: $1${NC}"; exit 1; }
+step() { printf "\n${CYAN}>> %s${NC}\n" "$1"; }
+ok() { printf "   ${GREEN}OK: %s${NC}\n" "$1"; }
+warn() { printf "   ${YELLOW}WARN: %s${NC}\n" "$1"; }
+fail() { printf "   ${RED}FAIL: %s${NC}\n" "$1"; exit 1; }
 
 print_banner() {
-  echo -e "${MAGENTA}"
-  echo '  ████╗   ███████═╗ ██╗   ██╗ ███████╗ ███████╗  ███████╗ ██╗   ██╗'
-  echo '██╔═══██╗ ██╔═══██║ ╚██╗ ██╔╝ ██╔════╝ ██╔════╝  ██╔════╝ ╚██╗ ██╔╝'
-  echo '██║   ██║ ██║   ██║  ╚████╔╝  ███████╗ ███████╗  █████╗    ╚████╔╝'
-  echo '██║   ██║ ██║   ██║   ╚██╔╝   ╚════██║ ╚════██║  ██╔══╝     ╚██╔╝'
-  echo '╚═████╔═╝ ███████╔╝    ██║    ███████║ ███████║  ███████╗    ██║'
-  echo '  ╚═══╝   ╚══════╝     ╚═╝    ╚══════╝ ╚══════╝  ╚══════╝    ╚═╝'
-  echo '   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,('
-  echo '`-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'
-  echo -e "${NC}"
+  printf "${MAGENTA}\n"
+  printf '  ████╗   ███████═╗ ██╗   ██╗ ███████╗ ███████╗  ███████╗ ██╗   ██╗\n'
+  printf '██╔═══██╗ ██╔═══██║ ╚██╗ ██╔╝ ██╔════╝ ██╔════╝  ██╔════╝ ╚██╗ ██╔╝\n'
+  printf '██║   ██║ ██║   ██║  ╚████╔╝  ███████╗ ███████╗  █████╗    ╚████╔╝\n'
+  printf '██║   ██║ ██║   ██║   ╚██╔╝   ╚════██║ ╚════██║  ██╔══╝     ╚██╔╝\n'
+  printf '╚═████╔═╝ ███████╔╝    ██║    ███████║ ███████║  ███████╗    ██║\n'
+  printf '  ╚═══╝   ╚══════╝     ╚═╝    ╚══════╝ ╚══════╝  ╚══════╝    ╚═╝\n'
+  printf '   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(\n'
+  printf '`-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-'"'"'  `-\n'
+  printf "${NC}\n"
 }
 
 install_brew_packages() {
@@ -78,21 +78,18 @@ npmPackages() {
 
 main() {
   print_banner
-  echo -e "${CYAN}===== Odyssey: Mac Setup =====${NC}"
+  printf "${CYAN}===== Odyssey: Mac Setup =====${NC}\n"
 
   install_brew_packages
   setup_zsh
   symlink
   npmPackages
 
-  echo ""
-  echo -e "${GREEN}===== Setup Complete =====${NC}"
-  echo ""
-  echo -e "${YELLOW}NEXT STEPS:${NC}"
-  echo -e "  1. Restart your terminal to load the new shell config"
-  echo -e "  2. Open Neovim — plugins will auto-install on first launch"
-  echo -e "  3. Install Bitwarden from the App Store for Touch ID support"
-  echo ""
+  printf "\n${GREEN}===== Setup Complete =====${NC}\n"
+  printf "\n${YELLOW}NEXT STEPS:${NC}\n"
+  printf "  1. Restart your terminal to load the new shell config\n"
+  printf "  2. Open Neovim — plugins will auto-install on first launch\n"
+  printf "  3. Install Bitwarden from the App Store for Touch ID support\n\n"
 }
 
 main $@

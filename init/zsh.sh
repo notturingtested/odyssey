@@ -11,9 +11,9 @@ CYAN='\033[0;36m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-step() { echo -e "\n${CYAN}>> $1${NC}"; }
-ok() { echo -e "   ${GREEN}OK: $1${NC}"; }
-warn() { echo -e "   ${YELLOW}WARN: $1${NC}"; }
+step() { printf "\n${CYAN}>> %s${NC}\n" "$1"; }
+ok() { printf "   ${GREEN}OK: %s${NC}\n" "$1"; }
+warn() { printf "   ${YELLOW}WARN: %s${NC}\n" "$1"; }
 
 step "Checking oh-my-zsh..."
 if [ -d ~/.oh-my-zsh ]; then
