@@ -239,8 +239,7 @@ function Main {
     Write-Host ""
     Write-Host "===== Setup Complete =====" -ForegroundColor Green
     Write-Host "Next Steps:"
-    Write-Host "Copy nixos directory to /etc/nixos"
-    Write-Host "Run nixos-setup.sh"
+    Write-Host "Copy bootstrap-setup.sh into nixos, chmod and run"
     Write-Host "Launching NixOS..." -ForegroundColor Cyan
     wsl -d NixOS
 }
