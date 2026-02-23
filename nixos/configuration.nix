@@ -7,6 +7,7 @@
     wslConf.automount.root = "/mnt";
     useWindowsDriver = true; # NVIDIA GPU passthrough
   };
+  programs.nix-ld.enable = true;
 
   # ── Nix Settings ──────────────────────────────────────
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
