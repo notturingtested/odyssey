@@ -24,13 +24,19 @@
   # ── Ollama ────────────────────────────────────────────
   services.ollama = {
     enable = true;
-    acceleration = "cuda";
+    acceleration = pkgs.ollama-cuda;
     host = "0.0.0.0";
     port = 11434;
     home = "/mnt/c/ai-models";
   };
-
-  # ── Open WebUI (OCI container) ────────────────────────
+  #Options for acceleration ^
+  # pkgs.ollama-cuda                  NVIDIA GPU
+  # pkgs.ollama-rocm                  AMD 
+  # GPUpkgs.ollama-vulkan             Vulkan 
+  # (experimental) pkgs.ollama-cpu     CPU 
+  # onlypkgs.ollama                   Default (usually CPU)
+  
+# ── Open WebUI (OCI container) ────────────────────────
   virtualisation.podman.enable = true;
 
   virtualisation.oci-containers = {
