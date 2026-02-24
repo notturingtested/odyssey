@@ -29,13 +29,6 @@ else
     ok "Cloned to $REPO_DIR"
 fi
 
-# ── Symlink NixOS config ──────────────────────────────
-step "Symlinking NixOS config to /etc/nixos/..."
-sudo ln -sf "$REPO_DIR/nixos/flake.nix" /etc/nixos/flake.nix
-sudo ln -sf "$REPO_DIR/nixos/configuration.nix" /etc/nixos/configuration.nix
-ok "flake.nix → /etc/nixos/flake.nix"
-ok "configuration.nix → /etc/nixos/configuration.nix"
-
 # ── Run setup ─────────────────────────────────────────
 step "Running NixOS setup..."
 exec bash "$REPO_DIR/init/nixos-setup.sh"

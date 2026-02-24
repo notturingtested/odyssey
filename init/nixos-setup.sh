@@ -22,7 +22,7 @@ fail() { echo -e "   ${RED}FAIL: $1${NC}"; exit 1; }
 # ── Apply NixOS Config ───────────────────────────────────
 apply_config() {
     step "Applying NixOS configuration via flake..."
-    sudo nixos-rebuild switch --flake /etc/nixos#wsl
+    sudo nixos-rebuild switch --flake "$HOME/.odyssey/nixos#wsl"
     ok "NixOS configuration applied"
 }
 
