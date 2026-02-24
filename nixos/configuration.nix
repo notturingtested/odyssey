@@ -105,5 +105,18 @@
     allowedTCPPorts = [ 3000 11434 ];
   };
 
+  # ── Fix Tailscale MTU for WSL2 ──────────────────────
+  systemd.services.tailscale-mtu = {
+    description = "Set Tailscale MTU to 1280 for WSL2 compatibility";
+    after = [ "tailscaled.service" ];
+    wants = [ "tailscaled.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.iproute2}/bin/ip link set tailscale0 mtu 1280";
+    };
+  };
+
   system.stateVersion = "24.11";
 }

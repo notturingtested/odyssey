@@ -1,19 +1,41 @@
 #!/usr/bin/env bash
-# bootstrap.sh — fetch Odyssey configs and kick off Phase 2
+###################################################################
+# Name          bootstrap-nixos.sh
+# Description   Bootstrap Odyssey on a fresh NixOS WSL instance
+# Usage         nix-shell -p curl --run "bash <(curl -fsSL https://raw.githubusercontent.com/notturingtested/odyssey/main/init/bootstrap-nixos.sh)"
+###################################################################
 
 set -e
 
-REPO="https://raw.githubusercontent.com/notturingtested/odyssey/main"
+REPO_URL="https://github.com/notturingtested/odyssey.git"
+REPO_DIR="$HOME/.odyssey"
 
-echo ">> Fetching NixOS configs..."
-nix-shell -p curl --run "
-  sudo curl -fsSL $REPO/nixos/flake.nix -o /etc/nixos/flake.nix
-  sudo curl -fsSL $REPO/nixos/configuration.nix -o /etc/nixos/configuration.nix
-  curl -fsSL $REPO/init/nixos-setup.sh -o /tmp/nixos-setup.sh
-"
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+RED='\033[0;31m'
+NC='\033[0m'
 
-echo ">> Making setup script executable..."
-chmod +x /tmp/nixos-setup.sh
+step() { echo -e "\n${CYAN}>> $1${NC}"; }
+ok()   { echo -e "   ${GREEN}OK: $1${NC}"; }
+fail() { echo -e "   ${RED}FAIL: $1${NC}"; exit 1; }
 
-echo ">> Running Phase 2 setup..."
-exec /tmp/nixos-setup.sh
+# ── Clone repo ─────────────────────────────────────────
+step "Cloning Odyssey repo..."
+if [ -d "$REPO_DIR" ]; then
+    ok "Repo already exists at $REPO_DIR — pulling latest"
+    git -C "$REPO_DIR" pull
+else
+    nix-shell -p git --run "git clone $REPO_URL $REPO_DIR"
+    ok "Cloned to $REPO_DIR"
+fi
+
+# ── Symlink NixOS config ──────────────────────────────
+step "Symlinking NixOS config to /etc/nixos/..."
+sudo ln -sf "$REPO_DIR/nixos/flake.nix" /etc/nixos/flake.nix
+sudo ln -sf "$REPO_DIR/nixos/configuration.nix" /etc/nixos/configuration.nix
+ok "flake.nix → /etc/nixos/flake.nix"
+ok "configuration.nix → /etc/nixos/configuration.nix"
+
+# ── Run setup ─────────────────────────────────────────
+step "Running NixOS setup..."
+exec bash "$REPO_DIR/init/nixos-setup.sh"
