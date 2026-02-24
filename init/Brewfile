@@ -14,23 +14,30 @@ cask 'warp'
 cask 'iTerm2'
 
 # Productivity
-cask 'bitwarden'
+# cask 'bitwarden' Intentionally commented. Needs to be installed from App Store for touch ID. 
 cask 'amethyst'
 cask 'maccy'
 cask 'brave-browser'
 cask 'google-chrome'
 cask 'firefox'
+cask 'zen'
 cask 'slack'
 cask 'orion'
 cask 'spotify'
+cask 'scroll-reverser'
+cask 'hammerspoon'
+cask 'karabiner-elements'
+cask 'tailscale-app'
+cask 'background-music'
 brew 'pomatez'
 
 # Code
-cask 'docker'
+cask 'docker-desktop'
+cask 'visual-studio-code'
 cask 'tableplus'
 cask 'postman'
 cask 'gpg-suite-no-mail'
-cask 'neovide'
+cask 'neovide-app'
 
 
 ###################################################################
@@ -52,8 +59,9 @@ brew 'wget'
 brew 'tmux'
 brew 'gawk'
 brew 'git-delta'
-brew 'pandoc' 
-brew 'ripgrep'
+brew 'htop'
+brew 'pandoc'
+brew 'speedtest-cli'
 brew 'tldr' # tldr of the man pages
 brew 'tree'
 brew 'direnv'
@@ -76,7 +84,6 @@ brew 'shfmt' # shell script formatting
 brew 'kind'
 brew 'kubectx'
 brew 'bitwarden-cli'
-brew 'k9s'
 brew 'awscli'
 brew 'kubent'
 
