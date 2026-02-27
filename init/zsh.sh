@@ -56,25 +56,57 @@ else
 fi
 
 step "Adding Odyssey banner to shell startup..."
-if ! grep -q 'odyssey_banner' ~/.zshrc 2>/dev/null; then
-	cat >> ~/.zshrc << 'BANNER'
+if grep -q 'odyssey_banner' ~/.zshrc 2>/dev/null; then
+	sed -i '' '/^# Odyssey banner$/,/^odyssey_banner$/d' ~/.zshrc
+	ok "Removed old Odyssey banner"
+fi
+cat >> ~/.zshrc << 'BANNER'
 
 # Odyssey banner
 odyssey_banner() {
-  echo '\033[0;35m'
-  echo '  ████╗   ███████═╗ ██╗   ██╗ ███████╗ ███████╗  ███████╗ ██╗   ██╗'
-  echo '██╔═══██╗ ██╔═══██║ ╚██╗ ██╔╝ ██╔════╝ ██╔════╝  ██╔════╝ ╚██╗ ██╔╝'
-  echo '██║   ██║ ██║   ██║  ╚████╔╝  ███████╗ ███████╗  █████╗    ╚████╔╝'
-  echo '██║   ██║ ██║   ██║   ╚██╔╝   ╚════██║ ╚════██║  ██╔══╝     ╚██╔╝'
-  echo '╚═████╔═╝ ███████╔╝    ██║    ███████║ ███████║  ███████╗    ██║'
-  echo '  ╚═══╝   ╚══════╝     ╚═╝    ╚══════╝ ╚══════╝  ╚══════╝    ╚═╝'
-  echo '   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,('
-  echo '`-'\''  `-'\''  `-'\''  `-'\''  `-'\''  `-'\''  `-'\''  `-'\''  `-'\''  `-'\''  `-'\''  `-'\''  `-'\''  `-'
-  echo '\033[0m'
+  local cols=$(tput cols)
+
+  # Helper: pads a string to center it (strips ANSI to measure visible width)
+  center() {
+    local stripped=$(echo -e "$1" | sed 's/\x1b\[[0-9;]*m//g')
+    local len=${#stripped}
+    local pad=$(( (cols - len) / 2 ))
+    [ $pad -lt 0 ] && pad=0
+    printf "%${pad}s" ""
+    echo -e "$1"
+  }
+
+  echo ""
+  local t='\033[38;2;140;180;255m'
+  local v='\033[38;2;60;120;240m'
+  local border=$(printf "${t}ψ ${v}∿∿∿ %.0s" $(seq 1 12))$(printf "${t}ψ")
+  center "$border"
+  echo ""
+
+  center '   \033[38;2;80;140;255m  ████╗   ███████═╗ ██╗   ██╗ ███████╗ ███████╗  ███████╗ ██╗   ██╗'
+  center '  \033[38;2;100;120;255m██╔═══██╗ ██╔═══██║ ╚██╗ ██╔╝ ██╔════╝ ██╔════╝  ██╔════╝ ╚██╗ ██╔╝'
+  center ' \033[38;2;120;100;250m██║   ██║ ██║   ██║  ╚████╔╝  ███████╗ ███████╗  █████╗    ╚████╔╝'
+  center ' \033[38;2;140;80;240m██║   ██║ ██║   ██║   ╚██╔╝   ╚════██║ ╚════██║  ██╔══╝     ╚██╔╝'
+  center '\033[38;2;160;60;225m╚═████╔═╝ ███████╔╝    ██║    ███████║ ███████║  ███████╗    ██║'
+  center '\033[38;2;180;50;210m  ╚═══╝   ╚══════╝     ╚═╝    ╚══════╝ ╚══════╝  ╚══════╝    ╚═╝'
+
+  local c1='\033[38;2;100;170;255m'
+  local c2='\033[38;2;30;70;180m'
+  local m='\033[38;2;70;120;220m'
+  local line1='' line2=''
+  for i in $(seq 0 13); do
+    if [ $i -lt 13 ]; then
+      line1+="${c1},${t}(   "
+      line2+="${m}\`${c2}-${m}'  "
+    else
+      line1+="${c1},${t}("
+      line2+="${m}\`${c2}-${m}'  ${m}\`${c2}-${m}'"
+    fi
+  done
+  center "$line1"
+  center "$line2"
+  echo -e '\033[0m'
 }
 odyssey_banner
 BANNER
-	ok "Odyssey banner added to .zshrc"
-else
-	ok "Odyssey banner already in .zshrc"
-fi
+ok "Odyssey banner added to .zshrc"
