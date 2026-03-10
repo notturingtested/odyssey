@@ -64,48 +64,63 @@ cat >> ~/.zshrc << 'BANNER'
 
 # Odyssey banner
 odyssey_banner() {
+  clear
   local cols=$(tput cols)
-
-  # Helper: pads a string to center it (strips ANSI to measure visible width)
-  center() {
-    local stripped=$(echo -e "$1" | sed 's/\x1b\[[0-9;]*m//g')
-    local len=${#stripped}
-    local pad=$(( (cols - len) / 2 ))
-    [ $pad -lt 0 ] && pad=0
-    printf "%${pad}s" ""
-    echo -e "$1"
-  }
-
-  echo ""
   local t='\033[38;2;140;180;255m'
   local v='\033[38;2;60;120;240m'
-  local border=$(printf "${t}ψ ${v}∿∿∿ %.0s" $(seq 1 12))$(printf "${t}ψ")
-  center "$border"
-  echo ""
-
-  center '   \033[38;2;80;140;255m  ████╗   ███████═╗ ██╗   ██╗ ███████╗ ███████╗  ███████╗ ██╗   ██╗'
-  center '  \033[38;2;100;120;255m██╔═══██╗ ██╔═══██║ ╚██╗ ██╔╝ ██╔════╝ ██╔════╝  ██╔════╝ ╚██╗ ██╔╝'
-  center ' \033[38;2;120;100;250m██║   ██║ ██║   ██║  ╚████╔╝  ███████╗ ███████╗  █████╗    ╚████╔╝'
-  center ' \033[38;2;140;80;240m██║   ██║ ██║   ██║   ╚██╔╝   ╚════██║ ╚════██║  ██╔══╝     ╚██╔╝'
-  center '\033[38;2;160;60;225m╚═████╔═╝ ███████╔╝    ██║    ███████║ ███████║  ███████╗    ██║'
-  center '\033[38;2;180;50;210m  ╚═══╝   ╚══════╝     ╚═╝    ╚══════╝ ╚══════╝  ╚══════╝    ╚═╝'
-
   local c1='\033[38;2;100;170;255m'
   local c2='\033[38;2;30;70;180m'
   local m='\033[38;2;70;120;220m'
-  local line1='' line2=''
-  for i in $(seq 0 13); do
-    if [ $i -lt 13 ]; then
-      line1+="${c1},${t}(   "
-      line2+="${m}\`${c2}-${m}'  "
+
+  # Build wave lines
+  local border=$(printf "${t}ψ ${v}∿∿∿ %.0s" $(seq 1 13))$(printf "${t}ψ")
+  local wave1='   ' wave2=""
+  wave2+="${m}\`${c2}-${m}'  "
+
+  for i in $(seq 0 14); do
+    if [ $i -lt 14 ]; then
+      wave1+="${c1},${t}(   "
+      wave2+="${m}\`${c2}-${m}'  "
     else
-      line1+="${c1},${t}("
-      line2+="${m}\`${c2}-${m}'  ${m}\`${c2}-${m}'"
+      wave1+="${c1},${t}( "
+      wave2+="${m}\`${c2}-${m}'"
     fi
   done
-  center "$line1"
-  center "$line2"
-  echo -e '\033[0m'
+
+  # Collect all lines into an array
+  local lines=(
+    "$border"
+    ""
+    '      \033[38;2;80;140;255m  ████╗   ███████═╗ ██╗   ██╗ ███████╗ ███████╗  ███████╗ ██╗   ██╗'
+    '      \033[38;2;100;120;255m██╔═══██╗ ██╔═══██║ ╚██╗ ██╔╝ ██╔════╝ ██╔════╝  ██╔════╝ ╚██╗ ██╔╝'
+    '      \033[38;2;120;100;250m██║   ██║ ██║   ██║  ╚████╔╝  ███████╗ ███████╗  █████╗    ╚████╔╝'
+    '      \033[38;2;140;80;240m██║   ██║ ██║   ██║   ╚██╔╝   ╚════██║ ╚════██║  ██╔══╝     ╚██╔╝'
+    '      \033[38;2;160;60;225m╚═████╔═╝ ███████╔╝    ██║    ███████║ ███████║  ███████╗    ██║'
+    '      \033[38;2;180;50;210m  ╚═══╝   ╚══════╝     ╚═╝    ╚══════╝ ╚══════╝  ╚══════╝    ╚═╝'
+    "$wave1"
+    "$wave2"
+  )
+
+  # Find the widest visible line (use literal ESC for macOS sed compatibility)
+  local esc=$(printf '\033')
+  local max_w=0
+  for line in "${lines[@]}"; do
+    local stripped=$(printf '%b' "$line" | sed "s/${esc}\[[0-9;]*m//g")
+    local w=${#stripped}
+    [ $w -gt $max_w ] && max_w=$w
+  done
+
+  # Print all lines with uniform padding based on widest line
+  local pad=$(( (cols - max_w) / 2 ))
+  [ $pad -lt 0 ] && pad=0
+  local spacing=$(printf "%${pad}s" "")
+
+  echo ""
+  for line in "${lines[@]}"; do
+    printf '%s' "$spacing"
+    printf '%b\n' "$line"
+  done
+  printf '\033[0m'
 }
 odyssey_banner
 BANNER
