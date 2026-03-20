@@ -28,16 +28,54 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- Show Netrw
 vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 
--- Copy
+-- Copy / Paste / Cut (GUI - Neovide)
 vim.api.nvim_set_keymap('n', '<D-c>', ':w !pbcopy<CR><CR>', { noremap = true })
 vim.api.nvim_set_keymap('v', '<D-c>', ':w !pbcopy<CR><CR>', { noremap = true })
-
--- Paste
 vim.api.nvim_set_keymap('n', '<D-v>', ':r !pbpaste<CR>', { noremap = true })
 vim.api.nvim_set_keymap('i', '<D-v>', "<C-r>=system('pbpaste')<CR>", { noremap = true })
-
--- Cut
 vim.api.nvim_set_keymap('v', '<D-x>', ':w !pbcopy<CR><CR>gvd', { noremap = true })
 
 -- Set Escape to exit terminal mode
 vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
+
+-- [[ VS Code-style Cmd keybindings (via Kitty CSI u sequences) ]]
+-- Kitty sends CSI u codes for Cmd+key, map the raw sequences directly
+
+-- Cmd+S → Save
+vim.keymap.set({ 'n', 'i', 'v' }, '\x1b[115;9u', '<cmd>w<CR>', { desc = 'Save file' })
+
+-- Cmd+P → Find files (like VS Code quick open)
+vim.keymap.set('n', '\x1b[112;9u', '<cmd>Telescope find_files<CR>', { desc = 'Find files' })
+vim.keymap.set('i', '\x1b[112;9u', '<Esc><cmd>Telescope find_files<CR>', { desc = 'Find files' })
+
+-- Cmd+Shift+P → Command palette
+vim.keymap.set('n', '\x1b[112;10u', '<cmd>Telescope commands<CR>', { desc = 'Command palette' })
+vim.keymap.set('i', '\x1b[112;10u', '<Esc><cmd>Telescope commands<CR>', { desc = 'Command palette' })
+
+-- Cmd+F → Search in file
+vim.keymap.set('n', '\x1b[102;9u', '/', { desc = 'Search in file' })
+vim.keymap.set('i', '\x1b[102;9u', '<Esc>/', { desc = 'Search in file' })
+
+-- Cmd+Shift+F → Live grep (search across files)
+vim.keymap.set('n', '\x1b[102;10u', '<cmd>Telescope live_grep<CR>', { desc = 'Search across files' })
+vim.keymap.set('i', '\x1b[102;10u', '<Esc><cmd>Telescope live_grep<CR>', { desc = 'Search across files' })
+
+-- Cmd+W → Close buffer
+vim.keymap.set('n', '\x1b[119;9u', '<cmd>bd<CR>', { desc = 'Close buffer' })
+vim.keymap.set('i', '\x1b[119;9u', '<Esc><cmd>bd<CR>', { desc = 'Close buffer' })
+
+-- Cmd+Z → Undo
+vim.keymap.set('n', '\x1b[122;9u', 'u', { desc = 'Undo' })
+vim.keymap.set('i', '\x1b[122;9u', '<C-o>u', { desc = 'Undo' })
+
+-- Cmd+Shift+Z → Redo
+vim.keymap.set('n', '\x1b[122;10u', '<C-r>', { desc = 'Redo' })
+vim.keymap.set('i', '\x1b[122;10u', '<C-o><C-r>', { desc = 'Redo' })
+
+-- Cmd+B → Toggle sidebar (neo-tree)
+vim.keymap.set('n', '\x1b[98;9u', '<cmd>Neotree toggle<CR>', { desc = 'Toggle sidebar' })
+vim.keymap.set('i', '\x1b[98;9u', '<Esc><cmd>Neotree toggle<CR>', { desc = 'Toggle sidebar' })
+
+-- Cmd+Shift+E → Focus file explorer
+vim.keymap.set('n', '\x1b[101;10u', '<cmd>Neotree focus<CR>', { desc = 'Focus explorer' })
+vim.keymap.set('i', '\x1b[101;10u', '<Esc><cmd>Neotree focus<CR>', { desc = 'Focus explorer' })

@@ -32,6 +32,8 @@ cask 'background-music'
 brew 'pomatez'
 
 # Code
+cask 'claude'
+brew 'claude-code'
 cask 'docker-desktop'
 cask 'visual-studio-code'
 cask 'tableplus'

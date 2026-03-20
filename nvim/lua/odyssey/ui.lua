@@ -358,17 +358,81 @@ return {
     'nvimdev/dashboard-nvim',
     event = 'VimEnter',
     opts = function()
+      -- Gradient highlight groups matching zsh banner
+      local gradient_hls = {
+        { 'DashboardWaveBorder', '#8cb4ff' },
+        { 'DashboardLogo1', '#508cff' },
+        { 'DashboardLogo2', '#6478ff' },
+        { 'DashboardLogo3', '#7864fa' },
+        { 'DashboardLogo4', '#8c50f0' },
+        { 'DashboardLogo5', '#a03ce1' },
+        { 'DashboardLogo6', '#b432d2' },
+        { 'DashboardWave1', '#64aaf0' },
+        { 'DashboardWave2', '#4678dc' },
+      }
+      for _, hl in ipairs(gradient_hls) do
+        vim.api.nvim_set_hl(0, hl[1], { fg = hl[2] })
+      end
+
+      -- Apply gradient highlights to header lines via extmarks
+      -- Use vim.schedule so extmarks are applied after dashboard-nvim renders content
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'dashboard',
+        callback = function(ev)
+          vim.schedule(function()
+            local ns = vim.api.nvim_create_namespace 'odyssey_dashboard'
+            local lines = vim.api.nvim_buf_get_lines(ev.buf, 0, -1, false)
+            -- Find the wave border line to anchor all highlights relative to it
+            local anchor
+            for i, line in ipairs(lines) do
+              if line:find 'ψ' then
+                anchor = i - 1 -- convert to 0-indexed
+                break
+              end
+            end
+            if not anchor then
+              return
+            end
+            -- Offsets relative to the wave border line:
+            -- 0 = wave border, +2..+7 = 6 logo lines, +8 = wave1, +9 = wave2
+            local hl_offsets = {
+              [0] = 'DashboardWaveBorder',
+              [2] = 'DashboardLogo1',
+              [3] = 'DashboardLogo2',
+              [4] = 'DashboardLogo3',
+              [5] = 'DashboardLogo4',
+              [6] = 'DashboardLogo5',
+              [7] = 'DashboardLogo6',
+              [8] = 'DashboardWave1',
+              [9] = 'DashboardWave2',
+            }
+            for offset, hl in pairs(hl_offsets) do
+              local row = anchor + offset
+              pcall(vim.api.nvim_buf_set_extmark, ev.buf, ns, row, 0, {
+                end_row = row + 1,
+                hl_group = hl,
+                hl_eol = true,
+              })
+            end
+          end)
+        end,
+      })
+
+      -- stylua: ignore
       local logo = [[
-  ████╗   ███████═╗ ██╗   ██╗ ███████╗ ███████╗  ███████╗ ██╗   ██╗
-██╔═══██╗ ██╔═══██║ ╚██╗ ██╔╝ ██╔════╝ ██╔════╝  ██╔════╝ ╚██╗ ██╔╝
-██║   ██║ ██║   ██║  ╚████╔╝  ███████╗ ███████╗  █████╗    ╚████╔╝⠀
-██║   ██║ ██║   ██║   ╚██╔╝   ╚════██║ ╚════██║  ██╔══╝     ╚██╔╝⠀⠀
-╚═████╔═╝ ███████╔╝    ██║    ███████║ ███████║  ███████╗    ██║⠀⠀⠀
-  ╚═══╝   ╚══════╝     ╚═╝    ╚══════╝ ╚══════╝  ╚══════╝    ╚═╝⠀⠀⠀
-   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(⠀⠀⠀
-`-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-
-  ]]
-      logo = string.rep('\n', 8) .. logo .. '\n\n'
+ψ ∿∿∿ ψ ∿∿∿ ψ ∿∿∿ ψ ∿∿∿ ψ ∿∿∿ ψ ∿∿∿ ψ ∿∿∿ ψ ∿∿∿ ψ ∿∿∿ ψ ∿∿∿ ψ ∿∿∿ ψ ∿∿∿ ψ
+
+    ████╗   ███████═╗ ██╗   ██╗ ███████╗ ███████╗  ███████╗ ██╗   ██╗
+  ██╔═══██╗ ██╔═══██║ ╚██╗ ██╔╝ ██╔════╝ ██╔════╝  ██╔════╝ ╚██╗ ██╔╝
+  ██║   ██║ ██║   ██║  ╚████╔╝  ███████╗ ███████╗  █████╗    ╚████╔╝
+██║   ██║ ██║   ██║   ╚██╔╝   ╚════██║ ╚════██║  ██╔══╝     ╚██╔╝
+╚═████╔═╝ ███████╔╝    ██║    ███████║ ███████║  ███████╗    ██║
+  ╚═══╝   ╚══════╝     ╚═╝    ╚══════╝ ╚══════╝  ╚══════╝    ╚═╝
+,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(
+`-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  `-
+]]
+      -- stylua: ignore end
+      logo = string.rep('\n', 5) .. logo .. '\n\n'
       local opts = {
         theme = 'doom',
         hide = {
@@ -384,9 +448,8 @@ return {
             { action = "ene | startinsert", desc = " New file", icon = " ", key = "n" },
             { action = "Telescope oldfiles", desc = " Recent files", icon = " ", key = "r" },
             { action = "Telescope live_grep", desc = " Find text", icon = " ", key = "g" },
-            -- { action = [[lua require("util").telescope.config_files()()]], desc = " Config", icon = " ", key = "c" },
+            { action = "Telescope keymaps", desc = " Keybindings", icon = "⌨ ", key = "k" },
             { action = 'lua require("persistence").load()', desc = " Restore Session", icon = " ", key = "s" },
-            -- { action = "LazyExtras", desc = " Lazy Extras", icon = " ", key = "x" },
             { action = "Lazy", desc = " Lazy", icon = "󰒲 ", key = "l" },
             { action = "qa", desc = " Quit", icon = " ", key = "q" },
           },

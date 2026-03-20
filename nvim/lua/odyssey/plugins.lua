@@ -88,4 +88,13 @@ return {
   -- library used by other plugins
   { 'nvim-lua/plenary.nvim', lazy = true },
   { 'eandrju/cellular-automaton.nvim', keys = { { '<leader>fml', '<cmd>CellularAutomaton make_it_rain<CR>', desc = 'Make it rain' } } },
+  {
+    'greggh/claude-code.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {},
+    keys = {
+      { '<leader>cc', '<cmd>ClaudeCode<CR>', desc = 'Toggle Claude Code' },
+      { '<leader>cs', '<cmd>ClaudeCodeSend<CR>', mode = 'v', desc = 'Send to Claude Code' },
+    },
+  },
 }
