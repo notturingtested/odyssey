@@ -9,15 +9,15 @@ macos-icon-screen-color = #1a1b26,#24283b
 
 # Window
 background-opacity = 0.9
-macos-titlebar-style = system
+macos-titlebar-style = native
 macos-option-as-alt = left
 window-decoration = true
 
 # Cursor
 cursor-style-blink = false
 
-# Colors (One Dark)
-foreground = #979eab
+# Colors (One Dark Vibrant)
+foreground = #abb2bf
 background = #282c34
 
 palette = 0=#282c34
@@ -25,17 +25,17 @@ palette = 1=#e06c75
 palette = 2=#98c379
 palette = 3=#e5c07b
 palette = 4=#61afef
-palette = 5=#be5046
+palette = 5=#c678dd
 palette = 6=#56b6c2
-palette = 7=#979eab
-palette = 8=#393e48
-palette = 9=#d19a66
-palette = 10=#56b6c2
-palette = 11=#e5c07b
-palette = 12=#61afef
-palette = 13=#be5046
-palette = 14=#56b6c2
-palette = 15=#abb2bf
+palette = 7=#abb2bf
+palette = 8=#545862
+palette = 9=#e86671
+palette = 10=#a9dc76
+palette = 11=#ebd09c
+palette = 12=#7cc4f5
+palette = 13=#d898e8
+palette = 14=#6bc7d4
+palette = 15=#d7dae0
 
 # Cmd key mappings (send CSI u sequences so Neovim can map them)
 keybind = super+s=text:\x1b[115;9u
