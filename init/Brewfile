@@ -9,6 +9,7 @@
 ###################################################################
 
 # Terminal
+cask 'ghostty'
 cask 'kitty'
 cask 'warp'
 cask 'iTerm2'

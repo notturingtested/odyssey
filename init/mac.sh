@@ -68,6 +68,8 @@ symlink() {
   ok "tmux.conf -> ~/.tmux.conf"
   ln -sf ~/.odyssey/kitty ~/.config/kitty
   ok "kitty -> ~/.config/kitty"
+  ln -sf ~/.odyssey/ghostty ~/.config/ghostty
+  ok "ghostty -> ~/.config/ghostty"
   ln -sf ~/.odyssey/git/gitconfig ~/.gitconfig
   ok "gitconfig -> ~/.gitconfig"
 }
