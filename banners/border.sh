@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # Odyssey banner with animated top border + bottom waves
-# Both animate simultaneously.
 
 # Duration in seconds (default 10, pass as argument: ./border.sh 5)
 duration=${1:-10}
 total_frames=$(( int(${duration} * 5.0 + 0.5) ))
+(( total_frames < 1 )) && total_frames=1
 
 # Hide cursor and ensure cleanup on exit/interrupt
 printf '\033[?25l'
@@ -37,15 +37,83 @@ logo_colors=(
   '\033[38;2;180;50;210m'
 )
 
-# Measure widest line for centering
+# Build colored wave units (no per-char loop — just repeat pre-colored units)
+# Wave cycle across both lines:
+#   pos%5: 0=trough`, 1=trough-, 2=trough', 3=crest,  4=crest(
+# Each "phase" rotates which character falls at pos 0
+
+# The 5 crest variants (what appears when you start at each offset):
+#   offset 0: "   ,(   ,(   ,( ..."  → 3 spaces then colored ,( repeating
+#   offset 1: "  ,(   ,(   ,( ..."   → 2 spaces then colored ,( repeating
+#   etc.
+# Build them by repeating a colored 5-char unit at each phase
+
+# Colored unit pieces
+cu_crest="${c1},${rst}${t}(${rst}   "    # 5 visible chars: , ( sp sp sp
+cu_trough="${m}\`${rst}${c2}-${rst}${m}'${rst}  "  # 5 visible chars: ` - ' sp sp
+
+# Number of repetitions needed
+reps=16
+
+# Pre-build full repeated strings
+full_crest=""
+full_trough=""
+for (( i=0; i<reps; i++ )); do
+  full_crest+="$cu_crest"
+  full_trough+="$cu_trough"
+done
+
+# Border colored unit: "ψ ∿∿∿ " = 6 chars
+cu_border="${t}ψ${rst} ${v}∿∿∿${rst} "
+full_border=""
+for (( i=0; i<reps; i++ )); do
+  full_border+="$cu_border"
+done
+
+# For each phase offset, we need to prepend the right number of leading chars
+# from the middle of a unit. Pre-build the 5 crest/trough phase prefixes
+# and the 6 border phase prefixes.
+
+# Crest prefixes (what comes before the repeating unit at each offset)
+# The wave cycle: idx3=, idx4=( idx0,1,2=space
+# At offset 0: starts at idx0 → spaces first: "   " then repeating unit
+# At offset 1: starts at idx1 → "  " then unit shifted
+# etc.
+# Easier: for offset N, the prefix is chars N..4 of one unit
+typeset -a crest_prefix trough_prefix border_prefix
+crest_prefix=(
+  "   "                                    # offset 0: 3 spaces (idx 0,1,2)
+  "  "                                     # offset 1: 2 spaces (idx 1,2)
+  " "                                      # offset 2: 1 space (idx 2)
+  ""                                       # offset 3: starts at , (no prefix)
+  "${t}(${rst}   "                         # offset 4: starts at ( then 3 spaces
+)
+trough_prefix=(
+  ""                                       # offset 0: starts at ` (no prefix)
+  "${c2}-${rst}${m}'${rst}  "              # offset 1: starts at - ' sp sp
+  "${m}'${rst}  "                          # offset 2: starts at ' sp sp
+  "  "                                     # offset 3: 2 spaces
+  " "                                      # offset 4: 1 space
+)
+border_prefix=(
+  ""                                       # offset 0: starts at ψ
+  " ${v}∿∿∿${rst} "                       # offset 1: sp ∿∿∿ sp
+  "${v}∿∿∿${rst} "                        # offset 2: ∿∿∿ sp
+  "${v}∿∿${rst} "                         # offset 3: ∿∿ sp
+  "${v}∿${rst} "                          # offset 4: ∿ sp
+  " "                                      # offset 5: sp
+)
+
+# Measure max width
 esc=$(printf '\033')
-border_static=$(printf "${t}ψ ${v}∿∿∿ %.0s" $(seq 1 13))$(printf "${t}ψ")
-border_plain=$(printf '%b' "$border_static" | sed "s/${esc}\[[0-9;]*m//g")
-max_w=${#border_plain}
+max_w=0
 for line in "${logo_raw[@]}"; do
   w=${#line}
   (( w > max_w )) && max_w=$w
 done
+# Border is typically widest — "ψ ∿∿∿ " x 13 + "ψ" = 79 chars
+border_w=$(( 6 * 13 + 1 ))
+(( border_w > max_w )) && max_w=$border_w
 
 # Terminal centering
 cols=$(tput cols)
@@ -54,82 +122,41 @@ pad=$(( (cols - max_w) / 2 ))
 spacing=""
 (( pad > 0 )) && spacing=$(printf "%${pad}s" "")
 
-# Pre-compute 5 wave frames
-typeset -a crest_frames trough_frames
-
-for offset in 0 1 2 3 4; do
-  crest_line=""
-  trough_line=""
-
-  for (( pos=0; pos < max_w; pos++ )); do
-    idx=$(( (pos + 5 - offset) % 5 ))
-
-    case $idx in
-      3) crest_line+="${c1},${rst}" ;;
-      4) crest_line+="${t}(${rst}" ;;
-      *) crest_line+=" " ;;
-    esac
-
-    case $idx in
-      0) trough_line+="${m}\`${rst}" ;;
-      1) trough_line+="${c2}-${rst}" ;;
-      2) trough_line+="${m}'${rst}" ;;
-      *) trough_line+=" " ;;
-    esac
-  done
-
-  crest_frames+=("$crest_line")
-  trough_frames+=("$trough_line")
-done
-
-# Pre-compute 4 border frames (the ψ ∿∿∿ pattern shifts)
-# Border unit: "ψ ∿∿∿ " = 6 chars (ψ, space, ∿, ∿, ∿, space)
-typeset -a border_frames
-
-for offset in 0 1 2 3 4 5; do
-  border_line=""
-  for (( pos=0; pos < max_w; pos++ )); do
-    bidx=$(( (pos + 6 - offset) % 6 ))
-    case $bidx in
-      0) border_line+="${t}ψ${rst}" ;;
-      2|3|4) border_line+="${v}∿${rst}" ;;
-      *) border_line+=" " ;;
-    esac
-  done
-  border_frames+=("$border_line")
-done
-
-# Clear screen and draw static parts
+# Clear screen and draw everything immediately
 printf '\033[2J\033[H'
 
-# Line 1: border (initial)
-printf '%s%b\n' "$spacing" "${border_frames[1]}"
+# Line 1: border
+printf '%s%b%b\n' "$spacing" "${crest_prefix[1]}${full_border}" "$rst"
+# Actually draw the real border first
+printf '\033[1;1H'
+printf '%s%b%b' "$spacing" "${border_prefix[1]}${full_border}" "$rst"
+
 # Line 2: blank
-printf '\n'
+printf '\n\n'
 # Lines 3-8: logo
 for (( li=1; li<=6; li++ )); do
   printf '%s%b%s%b\n' "$spacing" "${logo_colors[$li]}" "${logo_raw[$li]}" "$rst"
 done
 
-# Wave lines at rows 9 and 10
+# Lines 9-10: waves
 wave_row=9
-printf '%s%b\n' "$spacing" "${crest_frames[1]}"
-printf '%s%b\n' "$spacing" "${trough_frames[1]}"
+printf '%s%b\n' "$spacing" "${crest_prefix[1]}${full_crest}"
+printf '%s%b\n' "$spacing" "${trough_prefix[1]}${full_trough}"
 
-# Animate both border and waves
+# Animate
 for (( frame=0; frame<total_frames; frame++ )); do
   widx=$(( (frame % 5) + 1 ))
   bidx=$(( (frame % 6) + 1 ))
 
   # Border (row 1)
   printf "\033[1;1H"
-  printf '%s%b' "$spacing" "${border_frames[$bidx]}"
+  printf '%s%b' "$spacing" "${border_prefix[$bidx]}${full_border}"
 
-  # Waves (rows 9-10)
+  # Waves
   printf "\033[${wave_row};1H"
-  printf '%s%b' "$spacing" "${crest_frames[$widx]}"
+  printf '%s%b' "$spacing" "${crest_prefix[$widx]}${full_crest}"
   printf "\033[$(( wave_row + 1 ));1H"
-  printf '%s%b' "$spacing" "${trough_frames[$widx]}"
+  printf '%s%b' "$spacing" "${trough_prefix[$widx]}${full_trough}"
 
   sleep 0.2
 done

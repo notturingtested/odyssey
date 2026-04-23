@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # Odyssey banner with animated bottom waves
-# Bottom waves ripple for ~5 seconds, everything else static.
 
 # Duration in seconds (default 10, pass as argument: ./waves.sh 5)
 duration=${1:-10}
 total_frames=$(( int(${duration} * 5.0 + 0.5) ))
+(( total_frames < 1 )) && total_frames=1
 
 # Hide cursor and ensure cleanup on exit/interrupt
 printf '\033[?25l'
@@ -40,16 +40,45 @@ logo_colors=(
   '\033[38;2;180;50;210m'
 )
 
-# Measure widest line for centering
-esc=$(printf '\033')
+# Build colored wave units (repeat pre-colored strings, no per-char loop)
+cu_crest="${c1},${rst}${t}(${rst}   "
+cu_trough="${m}\`${rst}${c2}-${rst}${m}'${rst}  "
+
+reps=16
+full_crest=""
+full_trough=""
+for (( i=0; i<reps; i++ )); do
+  full_crest+="$cu_crest"
+  full_trough+="$cu_trough"
+done
+
+# Phase prefixes for each offset
+typeset -a crest_prefix trough_prefix
+crest_prefix=(
+  "   "
+  "  "
+  " "
+  ""
+  "${t}(${rst}   "
+)
+trough_prefix=(
+  ""
+  "${c2}-${rst}${m}'${rst}  "
+  "${m}'${rst}  "
+  "  "
+  " "
+)
+
+# Measure max width
 max_w=0
-border_plain=$(printf '%b' "$border" | sed "s/${esc}\[[0-9;]*m//g")
-w=${#border_plain}
-(( w > max_w )) && max_w=$w
 for line in "${logo_raw[@]}"; do
   w=${#line}
   (( w > max_w )) && max_w=$w
 done
+esc=$(printf '\033')
+border_plain=$(printf '%b' "$border" | sed "s/${esc}\[[0-9;]*m//g")
+w=${#border_plain}
+(( w > max_w )) && max_w=$w
 
 # Terminal centering
 cols=$(tput cols)
@@ -58,77 +87,28 @@ pad=$(( (cols - max_w) / 2 ))
 spacing=""
 (( pad > 0 )) && spacing=$(printf "%${pad}s" "")
 
-# Pre-compute 5 colored wave frames (one per phase offset)
-# Wave unit: crest = ",(   " (5 chars), trough = "`-'  " (5 chars)
-# We need enough repetitions to fill max_w chars
-reps=$(( (max_w / 5) + 2 ))
-
-typeset -a crest_frames trough_frames
-
-for offset in 0 1 2 3 4; do
-  # Build one frame of the crest and trough lines at this offset
-  crest_line=""
-  trough_line=""
-
-  # The 5-char crest pattern: , ( sp sp sp
-  # The 5-char trough pattern: ` - ' sp sp
-  # At offset N, we start N chars into the pattern
-
-  # The 5-char wave cycle (both lines use same index):
-  #   idx 0: crest=space, trough=`
-  #   idx 1: crest=space, trough=-
-  #   idx 2: crest=space, trough='
-  #   idx 3: crest=,      trough=space
-  #   idx 4: crest=(      trough=space
-  for (( pos=0; pos < max_w; pos++ )); do
-    idx=$(( (pos + 5 - offset) % 5 ))
-
-    case $idx in
-      3) crest_line+="${c1},${rst}" ;;
-      4) crest_line+="${t}(${rst}" ;;
-      *) crest_line+=" " ;;
-    esac
-
-    case $idx in
-      0) trough_line+="${m}\`${rst}" ;;
-      1) trough_line+="${c2}-${rst}" ;;
-      2) trough_line+="${m}'${rst}" ;;
-      *) trough_line+=" " ;;
-    esac
-  done
-
-  crest_frames+=("$crest_line")
-  trough_frames+=("$trough_line")
-done
-
 # Clear screen and draw static parts
 printf '\033[2J\033[H'
 
-# Line 1: border
-printf '%s' "$spacing"
-printf '%b%b\n' "$border" "$rst"
-# Line 2: blank
+printf '%s%b%b\n' "$spacing" "$border" "$rst"
 printf '\n'
-# Lines 3-8: logo
 for (( li=1; li<=6; li++ )); do
   printf '%s%b%s%b\n' "$spacing" "${logo_colors[$li]}" "${logo_raw[$li]}" "$rst"
 done
 
-# Wave lines are at rows 9 and 10
+# Wave lines at rows 9 and 10
 wave_row=9
-
-# Draw initial wave (offset 0, index 1 in zsh)
-printf '%s%b\n' "$spacing" "${crest_frames[1]}"
-printf '%s%b\n' "$spacing" "${trough_frames[1]}"
+printf '%s%b\n' "$spacing" "${crest_prefix[1]}${full_crest}"
+printf '%s%b\n' "$spacing" "${trough_prefix[1]}${full_trough}"
 
 # Animate
 for (( frame=0; frame<total_frames; frame++ )); do
-  idx=$(( (frame % 5) + 1 ))  # zsh arrays are 1-indexed
+  idx=$(( (frame % 5) + 1 ))
 
   printf "\033[${wave_row};1H"
-  printf '%s%b' "$spacing" "${crest_frames[$idx]}"
+  printf '%s%b' "$spacing" "${crest_prefix[$idx]}${full_crest}"
   printf "\033[$(( wave_row + 1 ));1H"
-  printf '%s%b' "$spacing" "${trough_frames[$idx]}"
+  printf '%s%b' "$spacing" "${trough_prefix[$idx]}${full_trough}"
 
   sleep 0.2
 done

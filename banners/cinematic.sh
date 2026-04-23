@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 
 # Odyssey banner: full cinematic reveal
-# Phase 1: Border animates in (~1.5s)
-# Phase 2: Logo reveals line by line (~2s)
-# Phase 3: Waves flow (~remaining time)
+# Phase 1: Border reveals left to right (~1.2s)
+# Phase 2: Logo reveals line by line (~1.8s)
+# Phase 3: Border + waves animate (remaining time)
 
 # Duration in seconds (default 10, pass as argument: ./cinematic.sh 5)
 duration=${1:-10}
@@ -38,15 +38,54 @@ logo_colors=(
   '\033[38;2;180;50;210m'
 )
 
-# Measure widest line for centering
-esc=$(printf '\033')
-border_static=$(printf "${t}ψ ${v}∿∿∿ %.0s" $(seq 1 13))$(printf "${t}ψ")
-border_plain=$(printf '%b' "$border_static" | sed "s/${esc}\[[0-9;]*m//g")
-max_w=${#border_plain}
+# Build colored wave/border units
+cu_crest="${c1},${rst}${t}(${rst}   "
+cu_trough="${m}\`${rst}${c2}-${rst}${m}'${rst}  "
+cu_border="${t}ψ${rst} ${v}∿∿∿${rst} "
+
+reps=16
+full_crest=""
+full_trough=""
+full_border=""
+for (( i=0; i<reps; i++ )); do
+  full_crest+="$cu_crest"
+  full_trough+="$cu_trough"
+  full_border+="$cu_border"
+done
+
+# Phase prefixes
+typeset -a crest_prefix trough_prefix border_prefix
+crest_prefix=(
+  "   "
+  "  "
+  " "
+  ""
+  "${t}(${rst}   "
+)
+trough_prefix=(
+  ""
+  "${c2}-${rst}${m}'${rst}  "
+  "${m}'${rst}  "
+  "  "
+  " "
+)
+border_prefix=(
+  ""
+  " ${v}∿∿∿${rst} "
+  "${v}∿∿∿${rst} "
+  "${v}∿∿${rst} "
+  "${v}∿${rst} "
+  " "
+)
+
+# Max width
+max_w=0
 for line in "${logo_raw[@]}"; do
   w=${#line}
   (( w > max_w )) && max_w=$w
 done
+border_w=$(( 6 * 13 + 1 ))
+(( border_w > max_w )) && max_w=$border_w
 
 # Terminal centering
 cols=$(tput cols)
@@ -55,86 +94,39 @@ pad=$(( (cols - max_w) / 2 ))
 spacing=""
 (( pad > 0 )) && spacing=$(printf "%${pad}s" "")
 
-# Pre-compute wave frames
-typeset -a crest_frames trough_frames
-
-for offset in 0 1 2 3 4; do
-  crest_line=""
-  trough_line=""
-
-  for (( pos=0; pos < max_w; pos++ )); do
-    idx=$(( (pos + 5 - offset) % 5 ))
-
-    case $idx in
-      3) crest_line+="${c1},${rst}" ;;
-      4) crest_line+="${t}(${rst}" ;;
-      *) crest_line+=" " ;;
-    esac
-
-    case $idx in
-      0) trough_line+="${m}\`${rst}" ;;
-      1) trough_line+="${c2}-${rst}" ;;
-      2) trough_line+="${m}'${rst}" ;;
-      *) trough_line+=" " ;;
-    esac
-  done
-
-  crest_frames+=("$crest_line")
-  trough_frames+=("$trough_line")
-done
-
-# Pre-compute border frames
-typeset -a border_frames
-
-for offset in 0 1 2 3 4 5; do
-  border_line=""
-  for (( pos=0; pos < max_w; pos++ )); do
-    bidx=$(( (pos + 6 - offset) % 6 ))
-    case $bidx in
-      0) border_line+="${t}ψ${rst}" ;;
-      2|3|4) border_line+="${v}∿${rst}" ;;
-      *) border_line+=" " ;;
-    esac
-  done
-  border_frames+=("$border_line")
-done
-
 # Clear screen
 printf '\033[2J\033[H'
 
-# ── Phase 1: Border animates in (~1.5s) ──
-# Reveal border progressively from left to right
-border_full="${border_frames[1]}"
-border_full_plain=$(printf '%b' "$border_full" | sed "s/${esc}\[[0-9;]*m//g")
-border_len=${#border_full_plain}
+# ── Phase 1: Border reveals left to right (~1.2s) ──
+border_static=$(printf "${t}ψ ${v}∿∿∿ %.0s" $(seq 1 13))$(printf "${t}ψ")
+esc=$(printf '\033')
+border_chars=()
+# Split border into individual visible characters for progressive reveal
+border_stripped=$(printf '%b' "$border_static" | sed "s/${esc}\[[0-9;]*m//g")
+border_total=${#border_stripped}
 
-# Build the border progressively over 8 frames
 for (( step=1; step<=8; step++ )); do
-  reveal_w=$(( (max_w * step) / 8 ))
+  reveal=$(( (border_total * step) / 8 ))
+  # Build partial border up to reveal chars
   partial=""
-  for (( pos=0; pos < max_w; pos++ )); do
-    if (( pos < reveal_w )); then
-      bidx=$(( pos % 6 ))
-      case $bidx in
-        0) partial+="${t}ψ${rst}" ;;
-        2|3|4) partial+="${v}∿${rst}" ;;
-        *) partial+=" " ;;
-      esac
-    else
-      partial+=" "
-    fi
+  shown=0
+  for (( p=0; p < reveal; p++ )); do
+    bidx=$(( p % 6 ))
+    case $bidx in
+      0) partial+="${t}ψ${rst}" ;;
+      2|3|4) partial+="${v}∿${rst}" ;;
+      *) partial+=" " ;;
+    esac
   done
   printf "\033[1;1H"
   printf '%s%b' "$spacing" "$partial"
   sleep 0.15
 done
 
-# Blank line after border
-printf '\n'
-
-# ── Phase 2: Logo reveals line by line (~2s) ──
+# ── Phase 2: Logo reveals line by line (~1.8s) ──
+printf "\033[2;1H\n"
 for (( li=1; li<=6; li++ )); do
-  row=$(( li + 2 ))  # rows 3-8
+  row=$(( li + 2 ))
   printf "\033[${row};1H"
   printf '%s%b%s%b' "$spacing" "${logo_colors[$li]}" "${logo_raw[$li]}" "$rst"
   sleep 0.3
@@ -143,32 +135,27 @@ done
 # ── Phase 3: Waves flow (remaining time) ──
 wave_row=9
 
-# Calculate remaining frames
-# Phase 1: ~1.2s, Phase 2: ~1.8s = ~3s elapsed
 remaining=$(( duration - 3.0 ))
 (( remaining < 1 )) && remaining=1
 wave_frames=$(( int(remaining * 5.0 + 0.5) ))
 
-# Draw initial wave
+# Draw initial waves
 printf "\033[${wave_row};1H"
-printf '%s%b' "$spacing" "${crest_frames[1]}"
-printf "\033[$(( wave_row + 1 ));1H"
-printf '%s%b' "$spacing" "${trough_frames[1]}"
+printf '%s%b\n' "$spacing" "${crest_prefix[1]}${full_crest}"
+printf '%s%b\n' "$spacing" "${trough_prefix[1]}${full_trough}"
 
-# Animate border + waves together
+# Animate border + waves
 for (( frame=0; frame<wave_frames; frame++ )); do
   widx=$(( (frame % 5) + 1 ))
   bidx=$(( (frame % 6) + 1 ))
 
-  # Border
   printf "\033[1;1H"
-  printf '%s%b' "$spacing" "${border_frames[$bidx]}"
+  printf '%s%b' "$spacing" "${border_prefix[$bidx]}${full_border}"
 
-  # Waves
   printf "\033[${wave_row};1H"
-  printf '%s%b' "$spacing" "${crest_frames[$widx]}"
+  printf '%s%b' "$spacing" "${crest_prefix[$widx]}${full_crest}"
   printf "\033[$(( wave_row + 1 ));1H"
-  printf '%s%b' "$spacing" "${trough_frames[$widx]}"
+  printf '%s%b' "$spacing" "${trough_prefix[$widx]}${full_trough}"
 
   sleep 0.2
 done
