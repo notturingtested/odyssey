@@ -14,3 +14,18 @@
 	insteadOf = https://github.com/
 [credential]
 	helper = store
+[safe]
+	directory = /Users/braydntanner/actions-runner/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/runners/runner-1/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/runners/runner-1/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/runners/runner-3/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/runners/runner-2/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/runners/runner-2/_work/interpreter/interpreter
+	directory = /Users/braydntanner/actions-runner/runners/runner-3/_work/interpreter/interpreter
