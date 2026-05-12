@@ -1,0 +1,219 @@
+{
+  "enabledPlugins" : {
+    "claude-mem@thedotmack" : true,
+    "frontend-design@claude-plugins-official" : true,
+    "gopls-lsp@claude-plugins-official" : true,
+    "secrets-guard@devx-plugins" : true,
+    "superpowers@claude-plugins-official" : true,
+    "ui-ux-pro-max@ui-ux-pro-max-skill" : true,
+    "warp@claude-code-warp" : true
+  },
+  "extraKnownMarketplaces" : {
+    "claude-code-warp" : {
+      "source" : {
+        "repo" : "warpdotdev\/claude-code-warp",
+        "source" : "github"
+      }
+    },
+    "superpowers-marketplace" : {
+      "source" : {
+        "repo" : "obra\/superpowers-marketplace",
+        "source" : "github"
+      }
+    },
+    "thedotmack" : {
+      "source" : {
+        "repo" : "thedotmack\/claude-mem",
+        "source" : "github"
+      }
+    },
+    "ui-ux-pro-max-skill" : {
+      "source" : {
+        "repo" : "nextlevelbuilder\/ui-ux-pro-max-skill",
+        "source" : "github"
+      }
+    }
+  },
+  "hooks" : {
+    "Notification" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          },
+          {
+            "command" : "printf '\\a'",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "*"
+      }
+    ],
+    "PermissionRequest" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "timeout" : 86400,
+            "type" : "command"
+          }
+        ],
+        "matcher" : "*"
+      }
+    ],
+    "PostCompact" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "auto"
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "manual"
+      }
+    ],
+    "PostToolUse" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "*"
+      }
+    ],
+    "PostToolUseFailure" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "*"
+      }
+    ],
+    "PreCompact" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "auto"
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "manual"
+      }
+    ],
+    "PreToolUse" : [
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/braydntanner\/.claude\/hooks\/rtk-rewrite.sh",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "Bash"
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "*"
+      }
+    ],
+    "SessionEnd" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ]
+      }
+    ],
+    "SessionStart" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ]
+      }
+    ],
+    "Stop" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ]
+      }
+    ],
+    "StopFailure" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ]
+      }
+    ],
+    "SubagentStart" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ]
+      }
+    ],
+    "SubagentStop" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 '\/Users\/braydntanner\/.claude\/hooks\/claude-island-state.py'",
+            "type" : "command"
+          }
+        ]
+      }
+    ]
+  },
+  "skipDangerousModePermissionPrompt" : true
+}
